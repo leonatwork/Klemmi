@@ -8,7 +8,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
 swiftc -O \
   Sources/Support.swift Sources/HistoryItem.swift Sources/HistoryStore.swift Sources/ClipboardMonitor.swift \
-  Sources/Clipboard.swift Sources/HistoryList.swift Sources/StatusItem.swift Sources/main.swift \
+  Sources/Clipboard.swift Sources/HistoryList.swift Sources/MainWindow.swift Sources/StatusItem.swift Sources/main.swift \
   -framework AppKit \
   -o "$APP/Contents/MacOS/Klemmi"
 

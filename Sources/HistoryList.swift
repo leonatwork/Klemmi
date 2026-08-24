@@ -86,19 +86,24 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
     private let emptyLabel = NSTextField(labelWithString: "Noch nichts kopiert")
     private let countLabel = NSTextField(labelWithString: "")
     private let clearButton = NSButton(title: "Leeren", target: nil, action: nil)
+    private let openFullButton = NSButton(title: "Übersicht …", target: nil, action: nil)
 
     private var filtered: [HistoryItem] = []
     var onSelect: ((HistoryItem) -> Void)?
+    var onOpenFullView: (() -> Void)?
 
     override func loadView() {
         let root = NSView(frame: NSRect(x: 0, y: 0, width: 340, height: 420))
         view = root
         build(in: root)
-        HistoryStore.shared.onChange = { [weak self] in
-            DispatchQueue.main.async { self?.applyFilter() }
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(historyChanged),
+                                                name: .klemmiHistoryDidChange, object: nil)
         applyFilter()
     }
+
+    deinit { NotificationCenter.default.removeObserver(self) }
+
+    @objc private func historyChanged() { applyFilter() }
 
     private func build(in root: NSView) {
         searchField.placeholderString = "Suchen …"
@@ -140,7 +145,13 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
         clearButton.action = #selector(clearHistory)
         clearButton.translatesAutoresizingMaskIntoConstraints = false
 
-        [searchField, scrollView, emptyLabel, countLabel, clearButton].forEach { root.addSubview($0) }
+        openFullButton.bezelStyle = .rounded
+        openFullButton.controlSize = .small
+        openFullButton.target = self
+        openFullButton.action = #selector(openFullView)
+        openFullButton.translatesAutoresizingMaskIntoConstraints = false
+
+        [searchField, scrollView, emptyLabel, countLabel, clearButton, openFullButton].forEach { root.addSubview($0) }
 
         NSLayoutConstraint.activate([
             searchField.topAnchor.constraint(equalTo: root.topAnchor, constant: 8),
@@ -158,12 +169,17 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
             countLabel.leadingAnchor.constraint(equalTo: root.leadingAnchor, constant: 10),
             countLabel.centerYAnchor.constraint(equalTo: clearButton.centerYAnchor),
 
+            openFullButton.trailingAnchor.constraint(equalTo: clearButton.leadingAnchor, constant: -6),
+            openFullButton.bottomAnchor.constraint(equalTo: root.bottomAnchor, constant: -8),
+
             clearButton.trailingAnchor.constraint(equalTo: root.trailingAnchor, constant: -8),
             clearButton.bottomAnchor.constraint(equalTo: root.bottomAnchor, constant: -8),
         ])
     }
 
     func reload() { applyFilter() }
+
+    @objc private func openFullView() { onOpenFullView?() }
 
     private func applyFilter() {
         let query = searchField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()

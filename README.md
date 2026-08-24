@@ -6,10 +6,11 @@ Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zw
 
 ## Funktionen
 
-- **Menüleisten-Symbol**: Klick öffnet ein Popover mit dem Verlauf, Rechtsklick ein Menü (Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Verlauf leeren, Beenden).
+- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Verlauf leeren, Beenden).
+- **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
 - **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
-- **Suche** über Text und Quell-App im Popover.
-- **Zurück in die Zwischenablage**: Doppelklick auf einen Eintrag kopiert ihn wieder in die Zwischenablage (Einfügen erfolgt manuell per ⌘V).
+- **Suche** über Text und Quell-App, sowohl im Popover als auch im Übersichtsfenster.
+- **Zurück in die Zwischenablage**: Doppelklick auf einen Eintrag (bzw. Rechtsklick → „In Zwischenablage kopieren“ im Übersichtsfenster) kopiert ihn wieder in die Zwischenablage (Einfügen erfolgt manuell per ⌘V).
 - **Persistenz**: Verlauf liegt unter `~/Library/Application Support/Klemmi` (Bilder als PNG, Metadaten als JSON) und übersteht einen Neustart der App.
 - **Begrenzung**: Standardmäßig die letzten 200 Einträge, ältere fallen automatisch raus (samt zugehöriger Bilddatei).
 - **Respektiert Passwort-Manager**: Inhalte, die per `org.nspasteboard.ConcealedType`/`TransientType`-Konvention als sensibel markiert sind (z. B. aus 1Password), werden standardmäßig nicht gespeichert (abschaltbar).
@@ -36,7 +37,8 @@ Das Skript kompiliert die Quellen, erzeugt das App-Symbol und legt `Klemmi.app` 
 | --- | --- |
 | `Sources/main.swift` | App-Delegate, Einstiegspunkt |
 | `Sources/StatusItem.swift` | Menüleisten-Symbol, Popover, Kontextmenü |
-| `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche |
+| `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche (Popover) |
+| `Sources/MainWindow.swift` | Übersichtsfenster mit Gruppierung nach Datum/App/Typ |
 | `Sources/ClipboardMonitor.swift` | Pollt die Zwischenablage, erkennt Quell-App |
 | `Sources/HistoryStore.swift` | Verlauf im Speicher + Persistenz auf Platte |
 | `Sources/HistoryItem.swift` | Datenmodell eines Eintrags |

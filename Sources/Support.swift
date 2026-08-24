@@ -18,4 +18,9 @@ struct Settings {
         get { d.object(forKey: "ignoreConcealed") as? Bool ?? true }
         set { d.set(newValue, forKey: "ignoreConcealed") }
     }
+    /// Zuletzt gewählte Gruppierung in der Übersicht (Rohwert von GroupingMode).
+    static var groupingMode: Int {
+        get { d.integer(forKey: "groupingMode") }
+        set { d.set(newValue, forKey: "groupingMode") }
+    }
 }

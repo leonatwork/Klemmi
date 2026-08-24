@@ -6,8 +6,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let popover = NSPopover()
     private let listController = HistoryListController()
+    private weak var mainWindow: MainWindowController?
 
-    override init() {
+    init(mainWindow: MainWindowController) {
+        self.mainWindow = mainWindow
         super.init()
 
         statusItem.autosaveName = "KlemmiStatusItem"
@@ -27,6 +29,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         listController.onSelect = { [weak self] item in
             Clipboard.copyToPasteboard(item)
             self?.popover.performClose(nil)
+        }
+        listController.onOpenFullView = { [weak self] in
+            self?.popover.performClose(nil)
+            self?.openMainWindow()
         }
     }
 
@@ -53,6 +59,9 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     private func showMenu() {
         let menu = NSMenu()
 
+        menu.addItem(withTitle: "Übersicht öffnen …", action: #selector(openMainWindow), keyEquivalent: "")
+        menu.addItem(.separator())
+
         let dock = NSMenuItem(title: "Im Dock anzeigen", action: #selector(toggleDock), keyEquivalent: "")
         dock.state = Settings.showInDock ? .on : .off
         menu.addItem(dock)
@@ -71,6 +80,12 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    @objc private func openMainWindow() {
+        NSApp.activate(ignoringOtherApps: true)
+        mainWindow?.showWindow(nil)
+        mainWindow?.window?.makeKeyAndOrderFront(nil)
     }
 
     @objc private func toggleDock() {

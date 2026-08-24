@@ -1,12 +1,17 @@
 import AppKit
 
+extension Notification.Name {
+    static let klemmiHistoryDidChange = Notification.Name("KlemmiHistoryDidChange")
+}
+
 /// Hält den Zwischenablage-Verlauf im Speicher und auf Platte
-/// (~/Library/Application Support/Klemmi).
+/// (~/Library/Application Support/Klemmi). Änderungen werden per
+/// Notification gemeldet, damit Popover und Hauptfenster gleichzeitig
+/// aktuell bleiben können.
 final class HistoryStore {
     static let shared = HistoryStore()
 
     private(set) var items: [HistoryItem] = []
-    var onChange: (() -> Void)?
 
     private let fm = FileManager.default
     private let imagesDir: URL
@@ -44,7 +49,7 @@ final class HistoryStore {
         items.insert(item, at: 0)
         trim()
         save()
-        onChange?()
+        NotificationCenter.default.post(name: .klemmiHistoryDidChange, object: nil)
     }
 
     private func trim() {
@@ -63,7 +68,7 @@ final class HistoryStore {
         if let file = items[idx].imageFile { try? fm.removeItem(at: imagesDir.appendingPathComponent(file)) }
         items.remove(at: idx)
         save()
-        onChange?()
+        NotificationCenter.default.post(name: .klemmiHistoryDidChange, object: nil)
     }
 
     func clear() {
@@ -72,7 +77,7 @@ final class HistoryStore {
         }
         items = []
         save()
-        onChange?()
+        NotificationCenter.default.post(name: .klemmiHistoryDidChange, object: nil)
     }
 
     // MARK: Bilder laden
