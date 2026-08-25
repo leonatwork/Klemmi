@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: macos-15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: ./build.sh
+
+      - name: Package
+        env:
+          VERSION: ${{ github.ref_name }}
+        run: |
+          # ditto rather than zip: it preserves the code signature.
+          ditto -c -k --keepParent dist/Klemmi.app "Klemmi-${VERSION}.zip"
+          shasum -a 256 "Klemmi-${VERSION}.zip" | tee checksum.txt
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          NOTES=$(cat <<'EOF'
+          ## Installation
+
+          ### Homebrew
+
+          ```bash
+          brew install --cask --no-quarantine leonatwork/tap/klemmi
+          ```
+
+          ### Manual
+
+          1. Download and unzip `Klemmi-__VERSION__.zip`
+          2. Drag `Klemmi.app` into `/Applications`
+          3. On first launch: **right-click ▸ Open** (not a double-click)
+
+          Step 3 is needed because this build is not notarised. Alternatively:
+
+          ```bash
+          xattr -dr com.apple.quarantine /Applications/Klemmi.app
+          ```
+
+          Klemmi needs no special permissions — it reads the clipboard, which macOS
+          does not gate behind a privacy prompt.
+
+          Full changes: [README](https://github.com/leonatwork/Klemmi#readme)
+          EOF
+          )
+          NOTES="${NOTES//__VERSION__/$VERSION}"
+          printf '%s\n\n**SHA-256**\n```\n%s\n```\n' "$NOTES" "$(cat checksum.txt)" > notes.md
+          gh release create "$VERSION" "Klemmi-${VERSION}.zip" \
+            --title "Klemmi $VERSION" --notes-file notes.md
