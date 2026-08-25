@@ -8,6 +8,18 @@ images, each with a timestamp and the app the content was copied from. It brings
 
 *🇩🇪 [Deutsche Version](README.de.md)*
 
+## Screenshots
+
+<div align="center">
+  <img src="docs/screenshots/popover.png" alt="Klemmi popover with clipboard history" width="380" />
+  <br />
+  <em>Menu bar popover — every entry shows the app it was copied from</em>
+  <br /><br />
+  <img src="docs/screenshots/overview.png" alt="Klemmi overview grouped by app" width="440" />
+  <br />
+  <em>Overview window, grouped by source app</em>
+</div>
+
 ## Features
 
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens

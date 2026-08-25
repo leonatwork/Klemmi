@@ -6,6 +6,18 @@ Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zw
 
 *🇬🇧 [English version](README.md) — die englische Fassung ist maßgeblich und wird zuerst aktualisiert.*
 
+## Screenshots
+
+<div align="center">
+  <img src="docs/screenshots/popover.png" alt="Klemmi-Popover mit Zwischenablage-Verlauf" width="380" />
+  <br />
+  <em>Menüleisten-Popover — jeder Eintrag zeigt, aus welcher App er stammt</em>
+  <br /><br />
+  <img src="docs/screenshots/overview.png" alt="Klemmi-Übersicht nach App gruppiert" width="440" />
+  <br />
+  <em>Übersichtsfenster, gruppiert nach Quell-App</em>
+</div>
+
 ## Funktionen
 
 - **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Verlauf leeren, Beenden).
