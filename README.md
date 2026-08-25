@@ -51,6 +51,14 @@ images, each with a timestamp and the app the content was copied from. It brings
   <kbd>⌘</kbd><kbd>V</kbd>.
 - No global shortcut to open the popover — only clicking the menu bar icon.
 
+## Installation
+
+```bash
+brew install --cask --no-quarantine leonatwork/tap/klemmi
+```
+
+`--no-quarantine` is needed because the builds are signed but not notarised.
+
 ## Building
 
 The Xcode Command Line Tools are the only requirement; there are no further dependencies.

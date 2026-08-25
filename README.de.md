@@ -35,6 +35,14 @@ Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zw
 - Kein automatisches Einfügen per Tastenkombination (würde Bedienungshilfen-Rechte erfordern) – ein Eintrag landet nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
 - Kein globales Tastaturkürzel zum Öffnen des Popovers, nur Klick auf das Menüleisten-Symbol.
 
+## Installation
+
+```bash
+brew install --cask --no-quarantine leonatwork/tap/klemmi
+```
+
+`--no-quarantine` ist nötig, weil die Builds signiert, aber nicht notarisiert sind.
+
 ## Bauen
 
 Voraussetzung sind die Xcode Command Line Tools – weitere Abhängigkeiten gibt es nicht.
