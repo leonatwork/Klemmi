@@ -1,47 +1,85 @@
 # Klemmi
 
-Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zwischenablage führt – Text und Bilder, jeweils mit Zeitstempel und der App, aus der der Inhalt kopiert wurde. Ersatz für Tools wie Pasta.
+Klemmi is a small native macOS app that keeps a searchable clipboard history — text and
+images, each with a timestamp and the app the content was copied from. It brings the
+`Win`+`V` clipboard history from Windows to macOS.
 
-![Plattform](https://img.shields.io/badge/macOS-13%2B-blue) ![Sprache](https://img.shields.io/badge/Swift-AppKit-orange)
+![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Funktionen
+*🇩🇪 [Deutsche Version](README.de.md)*
 
-- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Verlauf leeren, Beenden).
-- **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
-- **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
-- **Suche** über Text und Quell-App, sowohl im Popover als auch im Übersichtsfenster.
-- **Zurück in die Zwischenablage**: Doppelklick auf einen Eintrag (bzw. Rechtsklick → „In Zwischenablage kopieren“ im Übersichtsfenster) kopiert ihn wieder in die Zwischenablage (Einfügen erfolgt manuell per ⌘V).
-- **Persistenz**: Verlauf liegt unter `~/Library/Application Support/Klemmi` (Bilder als PNG, Metadaten als JSON) und übersteht einen Neustart der App.
-- **Begrenzung**: Standardmäßig die letzten 200 Einträge, ältere fallen automatisch raus (samt zugehöriger Bilddatei).
-- **Respektiert Passwort-Manager**: Inhalte, die per `org.nspasteboard.ConcealedType`/`TransientType`-Konvention als sensibel markiert sind (z. B. aus 1Password), werden standardmäßig nicht gespeichert (abschaltbar).
+## Features
 
-### Bekannte Grenzen (v1)
+- **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
+  a menu (open overview, show/hide the Dock icon, ignore sensitive content, clear history,
+  quit).
+- **Overview window**: a larger view grouping entries by **date** (today / yesterday / this
+  week / older), **app**, or **type** (text / images) — reachable via "Übersicht …" in the
+  popover or the right-click menu.
+- **Captures text and images** from the clipboard. Every entry shows which app it came from
+  (name and icon) plus a relative timestamp.
+- **Search** across text and source app, both in the popover and the overview window.
+- **Back to the clipboard**: double-click an entry (or right-click ▸ copy to clipboard in
+  the overview) to put it back on the clipboard. Pasting stays manual via <kbd>⌘</kbd><kbd>V</kbd>.
+- **Persistence**: the history lives in `~/Library/Application Support/Klemmi` (images as
+  PNG, metadata as JSON) and survives a restart of the app.
+- **Bounded**: the most recent 200 entries by default; older ones drop out automatically
+  along with their image files.
+- **Respects password managers**: content marked as sensitive via the
+  `org.nspasteboard.ConcealedType` / `TransientType` convention (1Password, for example) is
+  not stored by default. This can be switched off.
 
-- Die Quell-App wird über die zum Zeitpunkt des Kopierens vorderste App ermittelt (macOS liefert keine direkte Quellangabe über die Zwischenablage) – in der Regel zuverlässig, aber kein Systemgarantie.
-- Kein automatisches Einfügen per Tastenkombination (würde Bedienungshilfen-Rechte erfordern) – ein Eintrag landet nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
-- Kein globales Tastaturkürzel zum Öffnen des Popovers, nur Klick auf das Menüleisten-Symbol.
+### Known limitations (v1)
 
-## Bauen
+- The source app is determined from whichever app was frontmost at the moment of copying —
+  macOS provides no direct attribution through the clipboard. Reliable in practice, but not
+  guaranteed by the system.
+- No automatic pasting via a keyboard shortcut, which would require Accessibility
+  permissions. An entry is only placed on the clipboard; pasting stays
+  <kbd>⌘</kbd><kbd>V</kbd>.
+- No global shortcut to open the popover — only clicking the menu bar icon.
 
-Voraussetzung sind die Xcode Command Line Tools – weitere Abhängigkeiten gibt es nicht.
+## Building
+
+The Xcode Command Line Tools are the only requirement; there are no further dependencies.
 
 ```bash
+xcode-select --install
+git clone https://github.com/leonatwork/Klemmi.git
+cd Klemmi
 ./build.sh
 ```
 
-Das Skript kompiliert die Quellen, erzeugt das App-Symbol und legt `Klemmi.app` in `~/Applications` ab.
+The script compiles the sources, generates the app icon and places `Klemmi.app` in
+`~/Applications`.
 
-## Aufbau
+## Privacy
 
-| Datei | Inhalt |
+Klemmi stores everything locally in `~/Library/Application Support/Klemmi` and sends
+nothing anywhere. Be aware that a clipboard history is sensitive by nature: anything you
+copy ends up on disk unencrypted, which is exactly why content flagged as concealed by
+password managers is skipped by default. Clear the history from the menu bar icon when you
+would rather it did not persist.
+
+## Layout
+
+| File | Role |
 | --- | --- |
-| `Sources/main.swift` | App-Delegate, Einstiegspunkt |
-| `Sources/StatusItem.swift` | Menüleisten-Symbol, Popover, Kontextmenü |
-| `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche (Popover) |
-| `Sources/MainWindow.swift` | Übersichtsfenster mit Gruppierung nach Datum/App/Typ |
-| `Sources/ClipboardMonitor.swift` | Pollt die Zwischenablage, erkennt Quell-App |
-| `Sources/HistoryStore.swift` | Verlauf im Speicher + Persistenz auf Platte |
-| `Sources/HistoryItem.swift` | Datenmodell eines Eintrags |
-| `Sources/Clipboard.swift` | Schreibt einen Eintrag zurück in die Zwischenablage |
-| `Sources/Support.swift` | Einstellungen (UserDefaults) |
-| `icon.swift` | Erzeugt das App-Symbol als `.icns` |
+| `Sources/main.swift` | App delegate, entry point |
+| `Sources/StatusItem.swift` | Menu bar icon, popover, context menu |
+| `Sources/HistoryList.swift` | Table view of the history including search (popover) |
+| `Sources/MainWindow.swift` | Overview window grouped by date / app / type |
+| `Sources/ClipboardMonitor.swift` | Polls the clipboard, identifies the source app |
+| `Sources/HistoryStore.swift` | In-memory history plus persistence to disk |
+| `Sources/HistoryItem.swift` | Data model of a single entry |
+| `Sources/Clipboard.swift` | Writes an entry back to the clipboard |
+| `Sources/Support.swift` | Settings (UserDefaults) |
+| `icon.swift` | Generates the app icon as `.icns` |
+
+## Contributing
+
+Bug reports and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE) — free to use, modify and redistribute, without warranty.
