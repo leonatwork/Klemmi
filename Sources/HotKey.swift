@@ -32,7 +32,7 @@ final class OverlayHotKey {
                                          GetApplicationEventTarget(), 0, &hotKeyRef)
         if status != noErr {
             hotKeyRef = nil
-            NSLog("Klemmi: Tastenkürzel \(Self.displayString) konnte nicht registriert werden (Status \(status))")
+            NSLog("Klemmi: could not register shortcut \(Self.displayString) (status \(status))")
         }
     }
 

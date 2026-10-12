@@ -1,0 +1,106 @@
+/* Klemmi – zh-Hans. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – 剪贴板历史记录";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "打开概览…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "在程序坞中显示";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "忽略密码和敏感内容";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "使用 %@ 打开浮动面板";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "清除历史记录";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "退出 Klemmi";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "你可能也会喜欢的 App";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "完整套件…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "Alt+Tab 在窗口而非 App 之间切换";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Windows 11 的贴靠布局、Aero Snap 和贴靠辅助";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "截图工具式截屏，直接存入剪贴板";
+
+/* Placeholder of the search field */
+"list.search" = "搜索";
+
+/* Shown when the history is empty */
+"list.empty" = "尚未拷贝任何内容";
+
+/* Button: delete all entries */
+"list.clear" = "清除";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "概览…";
+
+/* Deletes a single entry */
+"list.delete" = "删除";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "拷贝到剪贴板";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "（空）";
+
+/* Preview title of an image entry */
+"item.image" = "图像";
+
+/* Title of the floating overlay */
+"overlay.title" = "剪贴板";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ 拷贝 · esc 关闭";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – 概览";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "日期";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "App";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "类型";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "全部";
+
+/* Group header when not grouped */
+"group.all" = "全部";
+
+/* Group header: text entries */
+"group.text" = "文本";
+
+/* Group header: image entries */
+"group.images" = "图像";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "未知";
+
+/* Group header: copied today */
+"group.today" = "今天";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "昨天";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "本周";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@（%2$ld）";

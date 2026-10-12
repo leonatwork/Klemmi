@@ -1,0 +1,106 @@
+/* Klemmi – it. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – Cronologia degli Appunti";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "Apri panoramica…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "Mostra nel Dock";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "Ignora password e contenuti sensibili";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "Pannello flottante con %@";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "Cancella cronologia";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "Esci da Klemmi";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "Altre app che potrebbero piacerti";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "Il pacchetto completo…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "Alt+Tab tra le finestre, non tra le app";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Snap Layouts, Aero Snap e Snap Assist di Windows 11";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "Screenshot in stile Strumento di cattura, direttamente negli Appunti";
+
+/* Placeholder of the search field */
+"list.search" = "Cerca";
+
+/* Shown when the history is empty */
+"list.empty" = "Non hai ancora copiato nulla";
+
+/* Button: delete all entries */
+"list.clear" = "Cancella";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "Panoramica…";
+
+/* Deletes a single entry */
+"list.delete" = "Elimina";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "Copia negli Appunti";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "(vuoto)";
+
+/* Preview title of an image entry */
+"item.image" = "Immagine";
+
+/* Title of the floating overlay */
+"overlay.title" = "Appunti";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ copia · esc chiudi";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – Panoramica";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "Data";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "App";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "Tipo";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "Tutto";
+
+/* Group header when not grouped */
+"group.all" = "Tutto";
+
+/* Group header: text entries */
+"group.text" = "Testo";
+
+/* Group header: image entries */
+"group.images" = "Immagini";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "Sconosciuta";
+
+/* Group header: copied today */
+"group.today" = "Oggi";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "Ieri";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "Questa settimana";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@ (%2$ld)";

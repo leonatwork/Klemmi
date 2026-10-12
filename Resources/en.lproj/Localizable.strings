@@ -1,0 +1,106 @@
+/* Klemmi – en. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – Clipboard History";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "Open Overview…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "Show in Dock";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "Ignore Passwords & Sensitive Content";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "Overlay via %@";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "Clear History";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "Quit Klemmi";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "More apps you might like";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "The whole package…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "Alt+Tab between windows, not apps";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Windows 11 Snap Layouts, Aero Snap and Snap Assist";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "Snipping-Tool-style screenshots straight to the clipboard";
+
+/* Placeholder of the search field */
+"list.search" = "Search";
+
+/* Shown when the history is empty */
+"list.empty" = "Nothing copied yet";
+
+/* Button: delete all entries */
+"list.clear" = "Clear";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "Overview…";
+
+/* Deletes a single entry */
+"list.delete" = "Delete";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "Copy to Clipboard";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "(empty)";
+
+/* Preview title of an image entry */
+"item.image" = "Image";
+
+/* Title of the floating overlay */
+"overlay.title" = "Clipboard";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ copy · esc close";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – Overview";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "Date";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "App";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "Type";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "All";
+
+/* Group header when not grouped */
+"group.all" = "All";
+
+/* Group header: text entries */
+"group.text" = "Text";
+
+/* Group header: image entries */
+"group.images" = "Images";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "Unknown";
+
+/* Group header: copied today */
+"group.today" = "Today";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "Yesterday";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "This Week";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@ (%2$ld)";

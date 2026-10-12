@@ -19,9 +19,9 @@ struct HistoryItem: Codable, Identifiable, Equatable {
         switch kind {
         case .text:
             let t = (text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            return t.isEmpty ? "(leer)" : t
+            return t.isEmpty ? L10n.tr("item.empty") : t
         case .image:
-            return "Bild"
+            return L10n.tr("item.image")
         }
     }
 }
