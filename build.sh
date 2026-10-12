@@ -51,17 +51,23 @@ fi
 echo "==> generating icon"
 swift icon.swift "$APP/Contents/Resources/AppIcon.icns"
 
-# Prefer a real signing identity over ad-hoc; run ./setup-signing.sh once to create one.
+# Prefer the shared signing identity over ad-hoc. In CI it comes from CODESIGN_IDENTITY;
+# locally it is picked up from the keychain if it has been imported there.
 IDENTITY="${CODESIGN_IDENTITY:-}"
 if [[ -z "$IDENTITY" ]]; then
-  if security find-identity -p codesigning 2>/dev/null | grep -q "Tappi Local Signing"; then
-    IDENTITY="Tappi Local Signing"
-  else
-    IDENTITY="-"
-  fi
+  for candidate in "leonatwork Code Signing" "Tappi Local Signing"; do
+    if security find-identity -p codesigning 2>/dev/null | grep -q "$candidate"; then
+      IDENTITY="$candidate"
+      break
+    fi
+  done
+  IDENTITY="${IDENTITY:--}"
 fi
 echo "==> codesign (identity: $IDENTITY)"
-codesign --force --deep --sign "$IDENTITY" "$APP" 2>/dev/null || codesign --force --deep --sign - "$APP"
+if ! codesign --force --deep --sign "$IDENTITY" "$APP"; then
+  echo "!!  signing with '$IDENTITY' failed" >&2
+  exit 1
+fi
 touch "$APP"
 
 if [[ "${1:-}" == "--install" ]]; then
