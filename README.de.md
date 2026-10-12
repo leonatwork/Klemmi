@@ -70,3 +70,19 @@ Das Skript kompiliert die Quellen, erzeugt das App-Symbol und legt `Klemmi.app` 
 | `Sources/Clipboard.swift` | Schreibt einen Eintrag zurück in die Zwischenablage |
 | `Sources/Support.swift` | Einstellungen (UserDefaults) |
 | `icon.swift` | Erzeugt das App-Symbol als `.icns` |
+
+## Open Source & Premium
+
+Klemmi ist und bleibt Open Source unter der MIT-Lizenz. Alles in diesem Repository darf
+weiterhin frei genutzt, verändert und weitergegeben werden.
+
+Geplant sind zwei Wege, das Projekt zu unterstützen:
+
+- **Sponsoring**: freiwillige Unterstützung der Weiterentwicklung. Der Link folgt hier,
+  sobald er eingerichtet ist.
+- **Premium-Erweiterungen**: optionale Zusatzfunktionen als separates, kostenpflichtiges
+  Paket. Sie bauen auf dem freien Kern auf und nehmen ihm nie Funktionen weg.
+
+## Lizenz
+
+[MIT](LICENSE) — freie Nutzung, Änderung und Weitergabe, ohne Gewährleistung.
