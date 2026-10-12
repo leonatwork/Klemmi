@@ -46,6 +46,12 @@ Please include your macOS version, whether you are on Apple Silicon or Intel, an
 relevant — which app you copied from. Please do **not** paste actual clipboard contents into
 an issue.
 
+## License of contributions
+
+Contributions are accepted under the MIT License, the same license as the project.
+Optional premium add-ons are developed separately. Community contributions are only
+included there with the contributor's explicit consent.
+
 ## Language
 
 Documentation is written in English. A German translation of the README lives in
