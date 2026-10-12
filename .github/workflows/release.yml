@@ -78,14 +78,6 @@ jobs:
           NOTES=$(cat <<'EOF'
           ## Installation
 
-          ### Homebrew
-
-          ```bash
-          brew install --cask --no-quarantine leonatwork/tap/klemmi
-          ```
-
-          ### Manual
-
           1. Download and unzip `Klemmi-__VERSION__.zip`
           2. Drag `Klemmi.app` into `/Applications`
           3. On first launch: **right-click ▸ Open** (not a double-click)
