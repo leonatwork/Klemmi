@@ -24,13 +24,13 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 ## Screenshots
 
 <div align="center">
-  <img src="docs/screenshots/popover.png" alt="Klemmi popover with clipboard history" width="380" />
+  <img src="docs/screenshots/popover.png" alt="Klemmi popover with search and clipboard history" width="420" />
   <br />
-  <em>Menu bar popover — every entry shows the app it was copied from</em>
+  <em>Menu bar popover — search, and every entry shows the app it was copied from and when</em>
   <br /><br />
-  <img src="docs/screenshots/overview.png" alt="Klemmi overview grouped by app" width="440" />
+  <img src="docs/screenshots/overview.png" alt="Klemmi overview window grouped by app" width="536" />
   <br />
-  <em>Overview window, grouped by source app</em>
+  <em>Overview window, grouped by source app (or by date or type)</em>
 </div>
 
 ## Features
@@ -40,6 +40,13 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
   working in. Type to filter, <kbd>↑</kbd>/<kbd>↓</kbd> to move, <kbd>↩</kbd> puts the entry
   on the clipboard and closes the overlay, <kbd>esc</kbd> closes it. Needs no Accessibility
   permission; can be switched off in the right-click menu.
+
+  <div align="center">
+    <img src="docs/screenshots/overlay.png" alt="Klemmi overlay opened with Command-Shift-C" width="516" />
+    <br />
+    <em>The <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> overlay — the newest entry is preselected, <kbd>↩</kbd> copies it</em>
+  </div>
+
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
   shortcut, clear history, more apps from the package, quit).

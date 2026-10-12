@@ -39,6 +39,21 @@ macOS 13 or later.
 - **Everything is stored unencrypted** in `~/Library/Application Support/Klemmi`. If you add
   new data to the store, consider whether it belongs on disk at all.
 
+## Screenshots
+
+The README images in `docs/screenshots/` (`popover`, `overview`, `overlay`, each in English
+and as `.de.png` in German) are rendered, not captured:
+
+```bash
+scripts/screenshots/render.sh
+```
+
+The script compiles the app sources together with `scripts/screenshots/ScreenshotHarness.swift`
+into a temporary app bundle and draws every view offscreen at 2× from invented demo entries.
+It never captures the screen, never reads or writes the clipboard and never touches your own
+history in `~/Library/Application Support/Klemmi`. Re-run it whenever the UI changes, check
+the images, and keep the demo entries free of personal data.
+
 ## Pull requests
 
 - One topic per PR.

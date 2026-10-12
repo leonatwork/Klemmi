@@ -11,6 +11,11 @@ extension Notification.Name {
 final class HistoryStore {
     static let shared = HistoryStore()
 
+    /// Alternativer Speicherort statt ~/Library/Application Support/Klemmi. Nur für
+    /// Werkzeuge wie scripts/screenshots, die mit Demo-Daten arbeiten; die App setzt ihn
+    /// nie. Muss vor dem ersten Zugriff auf `shared` gesetzt werden.
+    static var baseDirectoryOverride: URL?
+
     private(set) var items: [HistoryItem] = []
 
     private let fm = FileManager.default
@@ -19,7 +24,8 @@ final class HistoryStore {
 
     private init() {
         let support = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        let baseDir = support.appendingPathComponent("Klemmi", isDirectory: true)
+        let baseDir = Self.baseDirectoryOverride
+            ?? support.appendingPathComponent("Klemmi", isDirectory: true)
         imagesDir = baseDir.appendingPathComponent("Images", isDirectory: true)
         indexFile = baseDir.appendingPathComponent("history.json")
         try? fm.createDirectory(at: imagesDir, withIntermediateDirectories: true)
