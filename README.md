@@ -22,9 +22,14 @@ images, each with a timestamp and the app the content was copied from. It brings
 
 ## Features
 
+- **Global shortcut** <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd>: opens a floating overlay with
+  the history on the screen the mouse is on, without taking focus away from the app you are
+  working in. Type to filter, <kbd>↑</kbd>/<kbd>↓</kbd> to move, <kbd>↩</kbd> puts the entry
+  on the clipboard and closes the overlay, <kbd>esc</kbd> closes it. Needs no Accessibility
+  permission; can be switched off in the right-click menu.
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
-  a menu (open overview, show/hide the Dock icon, ignore sensitive content, clear history,
-  quit).
+  a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
+  shortcut, clear history, quit).
 - **Overview window**: a larger view grouping entries by **date** (today / yesterday / this
   week / older), **app**, or **type** (text / images) — reachable via "Übersicht …" in the
   popover or the right-click menu.
@@ -49,7 +54,8 @@ images, each with a timestamp and the app the content was copied from. It brings
 - No automatic pasting via a keyboard shortcut, which would require Accessibility
   permissions. An entry is only placed on the clipboard; pasting stays
   <kbd>⌘</kbd><kbd>V</kbd>.
-- No global shortcut to open the popover — only clicking the menu bar icon.
+- The overlay shortcut is fixed to <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> and cannot be
+  changed yet.
 
 ## Installation
 
@@ -87,6 +93,8 @@ would rather it did not persist.
 | --- | --- |
 | `Sources/main.swift` | App delegate, entry point |
 | `Sources/StatusItem.swift` | Menu bar icon, popover, context menu |
+| `Sources/Overlay.swift` | Floating overlay opened by the global shortcut |
+| `Sources/HotKey.swift` | Global shortcut ⌘⇧C via the Carbon hotkey API |
 | `Sources/HistoryList.swift` | Table view of the history including search (popover) |
 | `Sources/MainWindow.swift` | Overview window grouped by date / app / type |
 | `Sources/ClipboardMonitor.swift` | Polls the clipboard, identifies the source app |
