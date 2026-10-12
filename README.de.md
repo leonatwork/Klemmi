@@ -20,7 +20,8 @@ Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zw
 
 ## Funktionen
 
-- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Verlauf leeren, Beenden).
+- **Globales Kürzel ⌘⇧C**: öffnet ein schwebendes Overlay mit dem Verlauf auf dem Bildschirm, auf dem die Maus ist – ohne der App, in der man gerade arbeitet, den Fokus zu nehmen. Tippen filtert, ↑/↓ wählt, ↩ legt den Eintrag in die Zwischenablage und schließt das Overlay, esc schließt. Braucht keine Bedienungshilfen-Berechtigung; im Rechtsklick-Menü abschaltbar.
+- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Verlauf leeren, Beenden).
 - **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
 - **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
 - **Suche** über Text und Quell-App, sowohl im Popover als auch im Übersichtsfenster.
@@ -33,7 +34,7 @@ Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zw
 
 - Die Quell-App wird über die zum Zeitpunkt des Kopierens vorderste App ermittelt (macOS liefert keine direkte Quellangabe über die Zwischenablage) – in der Regel zuverlässig, aber kein Systemgarantie.
 - Kein automatisches Einfügen per Tastenkombination (würde Bedienungshilfen-Rechte erfordern) – ein Eintrag landet nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
-- Kein globales Tastaturkürzel zum Öffnen des Popovers, nur Klick auf das Menüleisten-Symbol.
+- Das Overlay-Kürzel ist fest auf ⌘⇧C eingestellt und noch nicht änderbar.
 
 ## Installation
 
@@ -59,6 +60,8 @@ Das Skript kompiliert die Quellen, erzeugt das App-Symbol und legt `Klemmi.app` 
 | --- | --- |
 | `Sources/main.swift` | App-Delegate, Einstiegspunkt |
 | `Sources/StatusItem.swift` | Menüleisten-Symbol, Popover, Kontextmenü |
+| `Sources/Overlay.swift` | Schwebendes Overlay, geöffnet per globalem Kürzel |
+| `Sources/HotKey.swift` | Globales Kürzel ⌘⇧C über die Carbon-Hotkey-API |
 | `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche (Popover) |
 | `Sources/MainWindow.swift` | Übersichtsfenster mit Gruppierung nach Datum/App/Typ |
 | `Sources/ClipboardMonitor.swift` | Pollt die Zwischenablage, erkennt Quell-App |

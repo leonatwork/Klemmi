@@ -12,8 +12,9 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 swiftc -O \
   Sources/Support.swift Sources/HistoryItem.swift Sources/HistoryStore.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
-  Sources/MainWindow.swift Sources/StatusItem.swift Sources/main.swift \
-  -framework AppKit \
+  Sources/MainWindow.swift Sources/StatusItem.swift Sources/HotKey.swift \
+  Sources/Overlay.swift Sources/main.swift \
+  -framework AppKit -framework Carbon \
   -o "$APP/Contents/MacOS/Klemmi"
 
 cat > "$APP/Contents/Info.plist" <<'PLIST'

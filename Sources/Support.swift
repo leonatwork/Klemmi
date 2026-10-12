@@ -18,6 +18,11 @@ struct Settings {
         get { d.object(forKey: "ignoreConcealed") as? Bool ?? true }
         set { d.set(newValue, forKey: "ignoreConcealed") }
     }
+    /// Globales Kürzel ⌘⇧C für das Overlay registrieren.
+    static var overlayHotKeyEnabled: Bool {
+        get { d.object(forKey: "overlayHotKeyEnabled") as? Bool ?? true }
+        set { d.set(newValue, forKey: "overlayHotKeyEnabled") }
+    }
     /// Zuletzt gewählte Gruppierung in der Übersicht (Rohwert von GroupingMode).
     static var groupingMode: Int {
         get { d.integer(forKey: "groupingMode") }

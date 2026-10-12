@@ -71,6 +71,11 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         concealed.state = Settings.ignoreConcealed ? .on : .off
         menu.addItem(concealed)
 
+        let hotKey = NSMenuItem(title: "Overlay per \(OverlayHotKey.displayString)",
+                                action: #selector(toggleHotKey), keyEquivalent: "")
+        hotKey.state = Settings.overlayHotKeyEnabled ? .on : .off
+        menu.addItem(hotKey)
+
         menu.addItem(.separator())
         menu.addItem(withTitle: "Verlauf leeren", action: #selector(clearHistory), keyEquivalent: "")
         menu.addItem(.separator())
@@ -95,6 +100,11 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     }
 
     @objc private func toggleConcealed() { Settings.ignoreConcealed.toggle() }
+
+    @objc private func toggleHotKey() {
+        Settings.overlayHotKeyEnabled.toggle()
+        OverlayHotKey.shared.apply()
+    }
 
     @objc private func clearHistory() { HistoryStore.shared.clear() }
 

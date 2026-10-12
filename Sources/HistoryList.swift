@@ -91,6 +91,17 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
     private var filtered: [HistoryItem] = []
     var onSelect: ((HistoryItem) -> Void)?
     var onOpenFullView: (() -> Void)?
+    /// Esc bei leerer Suche (nur im Overlay-Modus).
+    var onCancel: (() -> Void)?
+
+    /// Overlay-Modus: Einfachklick wählt, nach dem Filtern ist stets der oberste Eintrag
+    /// markiert, Pfeiltasten, ↩ und Esc im Suchfeld steuern die Liste.
+    var keyboardNavigation = false {
+        didSet {
+            tableView.action = keyboardNavigation ? #selector(rowActivated) : nil
+            tableView.doubleAction = keyboardNavigation ? nil : #selector(rowActivated)
+        }
+    }
 
     override func loadView() {
         let root = NSView(frame: NSRect(x: 0, y: 0, width: 340, height: 420))
@@ -190,9 +201,58 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
         tableView.reloadData()
         emptyLabel.isHidden = !all.isEmpty
         countLabel.stringValue = "\(all.count) \(all.count == 1 ? "Eintrag" : "Einträge")"
+        if keyboardNavigation, !filtered.isEmpty {
+            tableView.selectRowIndexes([0], byExtendingSelection: false)
+            tableView.scrollRowToVisible(0)
+        }
+    }
+
+    // MARK: Tastatursteuerung (Overlay)
+
+    var hasSearchText: Bool { !searchField.stringValue.isEmpty }
+
+    func resetSearch() {
+        searchField.stringValue = ""
+        applyFilter()
+    }
+
+    func focusSearch() {
+        view.window?.makeFirstResponder(searchField)
+    }
+
+    func moveSelection(by delta: Int) {
+        guard !filtered.isEmpty else { return }
+        let current = tableView.selectedRow
+        let next = current < 0 ? 0 : min(max(current + delta, 0), filtered.count - 1)
+        tableView.selectRowIndexes([next], byExtendingSelection: false)
+        tableView.scrollRowToVisible(next)
+    }
+
+    func activateSelection() {
+        let row = tableView.selectedRow
+        guard filtered.indices.contains(row) else { return }
+        onSelect?(filtered[row])
     }
 
     func controlTextDidChange(_ obj: Notification) { applyFilter() }
+
+    /// Pfeiltasten, ↩ und Esc im Suchfeld steuern im Overlay-Modus die Liste.
+    func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
+        guard keyboardNavigation else { return false }
+        switch selector {
+        case #selector(NSResponder.moveDown(_:)):
+            moveSelection(by: 1)
+        case #selector(NSResponder.moveUp(_:)):
+            moveSelection(by: -1)
+        case #selector(NSResponder.insertNewline(_:)):
+            activateSelection()
+        case #selector(NSResponder.cancelOperation(_:)):
+            if hasSearchText { resetSearch() } else { onCancel?() }
+        default:
+            return false
+        }
+        return true
+    }
 
     @objc private func clearHistory() { HistoryStore.shared.clear() }
 
