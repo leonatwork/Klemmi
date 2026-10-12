@@ -6,10 +6,10 @@ enum GroupingMode: Int, CaseIterable {
 
     var title: String {
         switch self {
-        case .date: return "Datum"
-        case .app: return "App"
-        case .type: return "Typ"
-        case .none: return "Alle"
+        case .date: return L10n.tr("grouping.date")
+        case .app: return L10n.tr("grouping.app")
+        case .type: return L10n.tr("grouping.type")
+        case .none: return L10n.tr("grouping.all")
         }
     }
 }
@@ -52,8 +52,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
                                                     trackingMode: .selectOne, target: nil, action: nil)
     private let outlineView = HistoryOutlineView()
     private let countLabel = NSTextField(labelWithString: "")
-    private let clearButton = NSButton(title: "Leeren", target: nil, action: nil)
-    private let emptyLabel = NSTextField(labelWithString: "Noch nichts kopiert")
+    private let clearButton = NSButton(title: L10n.tr("list.clear"), target: nil, action: nil)
+    private let emptyLabel = NSTextField(labelWithString: L10n.tr("list.empty"))
 
     private var groups: [GroupNode] = []
     private var mode: GroupingMode {
@@ -65,7 +65,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
         let w = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 440, height: 580),
                          styleMask: [.titled, .closable, .miniaturizable, .resizable],
                          backing: .buffered, defer: false)
-        w.title = "Klemmi – Übersicht"
+        w.title = L10n.tr("overview.windowTitle")
         w.center()
         w.setFrameAutosaveName("KlemmiMain")
         w.minSize = NSSize(width: 320, height: 360)
@@ -84,7 +84,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
     private func build() {
         guard let content = window?.contentView else { return }
 
-        searchField.placeholderString = "Suchen …"
+        searchField.placeholderString = L10n.tr("list.search")
         searchField.delegate = self
         searchField.translatesAutoresizingMaskIntoConstraints = false
 
@@ -172,7 +172,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
         outlineView.reloadData()
         outlineView.expandItem(nil, expandChildren: true)
         emptyLabel.isHidden = !all.isEmpty
-        countLabel.stringValue = "\(all.count) \(all.count == 1 ? "Eintrag" : "Einträge")"
+        countLabel.stringValue = L10n.tr("history.count", all.count)
     }
 
     func controlTextDidChange(_ obj: Notification) { reload() }
@@ -181,26 +181,26 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
         switch mode {
         case .none:
             guard !items.isEmpty else { return [] }
-            return [GroupNode(title: "Alle (\(items.count))", children: items.map(ItemNode.init))]
+            return [GroupNode(title: groupTitle(L10n.tr("group.all"), items.count), children: items.map(ItemNode.init))]
 
         case .type:
             let texts = items.filter { $0.kind == .text }
             let images = items.filter { $0.kind == .image }
             var out: [GroupNode] = []
-            if !texts.isEmpty { out.append(GroupNode(title: "Text (\(texts.count))", children: texts.map(ItemNode.init))) }
-            if !images.isEmpty { out.append(GroupNode(title: "Bilder (\(images.count))", children: images.map(ItemNode.init))) }
+            if !texts.isEmpty { out.append(GroupNode(title: groupTitle(L10n.tr("group.text"), texts.count), children: texts.map(ItemNode.init))) }
+            if !images.isEmpty { out.append(GroupNode(title: groupTitle(L10n.tr("group.images"), images.count), children: images.map(ItemNode.init))) }
             return out
 
         case .app:
             var order: [String] = []
             var buckets: [String: [HistoryItem]] = [:]
             for item in items {
-                let key = item.sourceAppName ?? "Unbekannt"
+                let key = item.sourceAppName ?? L10n.tr("group.unknownApp")
                 if buckets[key] == nil { buckets[key] = []; order.append(key) }
                 buckets[key]!.append(item)
             }
             let sortedKeys = order.sorted { (buckets[$0]?.count ?? 0) > (buckets[$1]?.count ?? 0) }
-            return sortedKeys.map { GroupNode(title: "\($0) (\(buckets[$0]!.count))", children: buckets[$0]!.map(ItemNode.init)) }
+            return sortedKeys.map { GroupNode(title: groupTitle($0, buckets[$0]!.count), children: buckets[$0]!.map(ItemNode.init)) }
 
         case .date:
             let cal = Calendar.current
@@ -208,17 +208,18 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
             var buckets: [String: [HistoryItem]] = [:]
             let df = DateFormatter()
             df.dateStyle = .long
-            df.locale = Locale(identifier: "de_DE")
+            df.locale = L10n.locale
+            let today = L10n.tr("group.today"), yesterday = L10n.tr("group.yesterday"), thisWeek = L10n.tr("group.thisWeek")
             for item in items {
                 let key: String
-                if cal.isDateInToday(item.date) { key = "Heute" }
-                else if cal.isDateInYesterday(item.date) { key = "Gestern" }
-                else if let days = cal.dateComponents([.day], from: item.date, to: Date()).day, days < 7 { key = "Diese Woche" }
+                if cal.isDateInToday(item.date) { key = today }
+                else if cal.isDateInYesterday(item.date) { key = yesterday }
+                else if let days = cal.dateComponents([.day], from: item.date, to: Date()).day, days < 7 { key = thisWeek }
                 else { key = df.string(from: item.date) }
                 if buckets[key] == nil { buckets[key] = []; order.append(key) }
                 buckets[key]!.append(item)
             }
-            let priority: [String: Int] = ["Heute": 0, "Gestern": 1, "Diese Woche": 2]
+            let priority: [String: Int] = [today: 0, yesterday: 1, thisWeek: 2]
             let sortedKeys = order.sorted { a, b in
                 if let pa = priority[a], let pb = priority[b] { return pa < pb }
                 if priority[a] != nil { return true }
@@ -227,8 +228,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
                 let db = buckets[b]?.first?.date ?? .distantPast
                 return da > db
             }
-            return sortedKeys.map { GroupNode(title: "\($0) (\(buckets[$0]!.count))", children: buckets[$0]!.map(ItemNode.init)) }
+            return sortedKeys.map { GroupNode(title: groupTitle($0, buckets[$0]!.count), children: buckets[$0]!.map(ItemNode.init)) }
         }
+    }
+
+    /// Gruppenüberschrift mit Anzahl, z. B. „Heute (3)“.
+    private static func groupTitle(_ name: String, _ count: Int) -> String {
+        L10n.tr("group.titleWithCount", name, count)
     }
 
     // MARK: Aktionen
@@ -244,8 +250,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate,
     private func buildContextMenu(for row: Int) -> NSMenu? {
         guard let node = outlineView.item(atRow: row) as? ItemNode else { return nil }
         let menu = NSMenu()
-        let copy = NSMenuItem(title: "In Zwischenablage kopieren", action: #selector(copyRow(_:)), keyEquivalent: "")
-        let delete = NSMenuItem(title: "Löschen", action: #selector(deleteRow(_:)), keyEquivalent: "")
+        let copy = NSMenuItem(title: L10n.tr("context.copy"), action: #selector(copyRow(_:)), keyEquivalent: "")
+        let delete = NSMenuItem(title: L10n.tr("list.delete"), action: #selector(deleteRow(_:)), keyEquivalent: "")
         [copy, delete].forEach { $0.target = self; $0.representedObject = node.item; menu.addItem($0) }
         return menu
     }

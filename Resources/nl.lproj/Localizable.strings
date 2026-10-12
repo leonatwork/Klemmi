@@ -1,0 +1,106 @@
+/* Klemmi – nl. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – Klembordgeschiedenis";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "Open overzicht…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "Toon in Dock";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "Negeer wachtwoorden en gevoelige inhoud";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "Zwevend paneel met %@";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "Wis geschiedenis";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "Stop Klemmi";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "Meer apps die je misschien leuk vindt";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "Het complete pakket…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "Alt+Tab tussen vensters, niet tussen apps";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Snap Layouts, Aero Snap en Snap Assist uit Windows 11";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "Schermafbeeldingen zoals met Knipprogramma, direct naar het klembord";
+
+/* Placeholder of the search field */
+"list.search" = "Zoek";
+
+/* Shown when the history is empty */
+"list.empty" = "Nog niets gekopieerd";
+
+/* Button: delete all entries */
+"list.clear" = "Wis";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "Overzicht…";
+
+/* Deletes a single entry */
+"list.delete" = "Verwijder";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "Kopieer naar klembord";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "(leeg)";
+
+/* Preview title of an image entry */
+"item.image" = "Afbeelding";
+
+/* Title of the floating overlay */
+"overlay.title" = "Klembord";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ kopieer · esc sluit";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – Overzicht";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "Datum";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "App";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "Type";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "Alles";
+
+/* Group header when not grouped */
+"group.all" = "Alles";
+
+/* Group header: text entries */
+"group.text" = "Tekst";
+
+/* Group header: image entries */
+"group.images" = "Afbeeldingen";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "Onbekend";
+
+/* Group header: copied today */
+"group.today" = "Vandaag";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "Gisteren";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "Deze week";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@ (%2$ld)";

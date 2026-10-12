@@ -10,7 +10,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
 swiftc -O \
-  Sources/Support.swift Sources/HistoryItem.swift Sources/HistoryStore.swift \
+  Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistoryStore.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
   Sources/MainWindow.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/Overlay.swift Sources/main.swift \
@@ -27,6 +27,12 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
   <key>CFBundleExecutable</key><string>Klemmi</string>
   <key>CFBundleIdentifier</key><string>de.local.klemmi</string>
   <key>CFBundleIconFile</key><string>AppIcon</string>
+  <key>CFBundleDevelopmentRegion</key><string>en</string>
+  <key>CFBundleLocalizations</key>
+  <array>
+    <string>en</string><string>de</string><string>fr</string><string>es</string><string>it</string>
+    <string>pt-BR</string><string>nl</string><string>ja</string><string>zh-Hans</string><string>ko</string>
+  </array>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>1.0.0</string>
   <key>CFBundleVersion</key><string>1</string>
@@ -47,6 +53,9 @@ if [[ -n "${VERSION:-}" ]]; then
   /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $SHORT" "$APP/Contents/Info.plist"
   echo "==> version $SHORT"
 fi
+
+echo "==> copying localizations"
+cp -R Resources/*.lproj "$APP/Contents/Resources/"
 
 echo "==> generating icon"
 swift icon.swift "$APP/Contents/Resources/AppIcon.icns"

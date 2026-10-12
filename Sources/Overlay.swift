@@ -60,12 +60,12 @@ final class OverlayController: NSObject, NSWindowDelegate {
         effect.layer?.cornerRadius = 12
         effect.layer?.masksToBounds = true
 
-        let title = NSTextField(labelWithString: "Zwischenablage")
+        let title = NSTextField(labelWithString: L10n.tr("overlay.title"))
         title.font = .systemFont(ofSize: 12, weight: .semibold)
         title.textColor = .secondaryLabelColor
         title.translatesAutoresizingMaskIntoConstraints = false
 
-        let hint = NSTextField(labelWithString: "↩ kopieren · esc schließen")
+        let hint = NSTextField(labelWithString: L10n.tr("overlay.hint"))
         hint.font = .systemFont(ofSize: 10.5)
         hint.textColor = .tertiaryLabelColor
         hint.translatesAutoresizingMaskIntoConstraints = false

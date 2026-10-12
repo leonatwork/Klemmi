@@ -4,9 +4,22 @@ Klemmi is a small native macOS app that keeps a searchable clipboard history —
 images, each with a timestamp and the app the content was copied from. It brings the
 `Win`+`V` clipboard history from Windows to macOS.
 
-![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
 
 *🇩🇪 [Deutsche Version](README.de.md)*
+
+## Part of the package
+
+Klemmi is one of four tools in the package **[I love macOS, but I miss some Windows features](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)**:
+
+| Tool | What it does | Download |
+| --- | --- | --- |
+| [Tappi](https://github.com/leonatwork/Tappi) | Alt+Tab between windows, not apps | [Latest release](https://github.com/leonatwork/Tappi/releases/latest) |
+| **[Klemmi](https://github.com/leonatwork/Klemmi)** (this tool) | Clipboard history like Win+V, with the app each entry came from | [Latest release](https://github.com/leonatwork/Klemmi/releases/latest) |
+| [Snapline](https://github.com/leonatwork/snapline) | Windows 11 Snap Layouts, Aero Snap and Snap Assist | [Latest release](https://github.com/leonatwork/snapline/releases/latest) |
+| [Snapboard](https://github.com/leonatwork/snapboard) | Snipping-Tool-style screenshots straight to the clipboard | [Latest release](https://github.com/leonatwork/snapboard/releases/latest) |
+
+Miss more than one of these on your Mac? Grab all four — they are small and work well together.
 
 ## Screenshots
 
@@ -29,9 +42,9 @@ images, each with a timestamp and the app the content was copied from. It brings
   permission; can be switched off in the right-click menu.
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
-  shortcut, clear history, quit).
+  shortcut, clear history, more apps from the package, quit).
 - **Overview window**: a larger view grouping entries by **date** (today / yesterday / this
-  week / older), **app**, or **type** (text / images) — reachable via "Übersicht …" in the
+  week / older), **app**, or **type** (text / images) — reachable via "Overview…" in the
   popover or the right-click menu.
 - **Captures text and images** from the clipboard. Every entry shows which app it came from
   (name and icon) plus a relative timestamp.
@@ -45,6 +58,9 @@ images, each with a timestamp and the app the content was copied from. It brings
 - **Respects password managers**: content marked as sensitive via the
   `org.nspasteboard.ConcealedType` / `TransientType` convention (1Password, for example) is
   not stored by default. This can be switched off.
+- **Speaks your language**: the interface is available in English, German, French, Spanish,
+  Italian, Portuguese (Brazil), Dutch, Japanese, Simplified Chinese and Korean and follows
+  the macOS language setting.
 
 ### Known limitations (v1)
 
@@ -59,13 +75,23 @@ images, each with a timestamp and the app the content was copied from. It brings
 
 ## Installation
 
-```bash
-brew install --cask --no-quarantine leonatwork/tap/klemmi
-```
+1. Download `Klemmi-<version>.zip` from the
+   [latest release](https://github.com/leonatwork/Klemmi/releases/latest).
+2. Unzip it and move `Klemmi.app` into your `Applications` folder.
+3. Open it once via **right-click ▸ Open**. The builds are signed but not notarised, so
+   Gatekeeper blocks a plain double-click on first launch. On macOS 15 or later, open
+   **System Settings ▸ Privacy & Security** after the first attempt and click
+   **Open Anyway**. If macOS claims the app is damaged, or as an alternative to the steps
+   above, remove the quarantine flag in Terminal:
 
-`--no-quarantine` is needed because the builds are signed but not notarised.
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/Klemmi.app
+   ```
 
-## Building
+Klemmi needs no special permissions — macOS does not gate reading the clipboard behind a
+privacy prompt.
+
+## Building from source
 
 The Xcode Command Line Tools are the only requirement; there are no further dependencies.
 
@@ -76,8 +102,9 @@ cd Klemmi
 ./build.sh
 ```
 
-The script compiles the sources, generates the app icon and places `Klemmi.app` in
-`~/Applications`.
+The script compiles the sources, copies the localizations, generates the app icon and
+places `Klemmi.app` in `dist/`; `./build.sh --install` also copies it into `/Applications`
+and starts it. After changing translations, run `scripts/check-localizations.sh`.
 
 ## Privacy
 
@@ -102,6 +129,9 @@ would rather it did not persist.
 | `Sources/HistoryItem.swift` | Data model of a single entry |
 | `Sources/Clipboard.swift` | Writes an entry back to the clipboard |
 | `Sources/Support.swift` | Settings (UserDefaults) |
+| `Sources/Localization.swift` | `L10n` helper around `NSLocalizedString` |
+| `Resources/<lang>.lproj/` | Translations (`Localizable.strings`, plurals in `Localizable.stringsdict`) |
+| `scripts/check-localizations.sh` | Checks that every language has every key and all files lint |
 | `icon.swift` | Generates the app icon as `.icns` |
 
 ## Contributing

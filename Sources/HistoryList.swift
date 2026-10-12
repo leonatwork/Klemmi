@@ -63,6 +63,7 @@ final class HistoryRowView: NSTableCellView {
 
     private static let relativeFormatter: RelativeDateTimeFormatter = {
         let f = RelativeDateTimeFormatter()
+        f.locale = L10n.locale
         f.unitsStyle = .abbreviated
         return f
     }()
@@ -83,10 +84,10 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
 
     private let searchField = NSSearchField()
     private let tableView = NSTableView()
-    private let emptyLabel = NSTextField(labelWithString: "Noch nichts kopiert")
+    private let emptyLabel = NSTextField(labelWithString: L10n.tr("list.empty"))
     private let countLabel = NSTextField(labelWithString: "")
-    private let clearButton = NSButton(title: "Leeren", target: nil, action: nil)
-    private let openFullButton = NSButton(title: "Übersicht …", target: nil, action: nil)
+    private let clearButton = NSButton(title: L10n.tr("list.clear"), target: nil, action: nil)
+    private let openFullButton = NSButton(title: L10n.tr("list.openOverview"), target: nil, action: nil)
 
     private var filtered: [HistoryItem] = []
     var onSelect: ((HistoryItem) -> Void)?
@@ -117,7 +118,7 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
     @objc private func historyChanged() { applyFilter() }
 
     private func build(in root: NSView) {
-        searchField.placeholderString = "Suchen …"
+        searchField.placeholderString = L10n.tr("list.search")
         searchField.delegate = self
         searchField.translatesAutoresizingMaskIntoConstraints = false
 
@@ -200,7 +201,7 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
         }
         tableView.reloadData()
         emptyLabel.isHidden = !all.isEmpty
-        countLabel.stringValue = "\(all.count) \(all.count == 1 ? "Eintrag" : "Einträge")"
+        countLabel.stringValue = L10n.tr("history.count", all.count)
         if keyboardNavigation, !filtered.isEmpty {
             tableView.selectRowIndexes([0], byExtendingSelection: false)
             tableView.scrollRowToVisible(0)
@@ -277,7 +278,7 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
     func tableView(_ tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
         guard edge == .trailing, filtered.indices.contains(row) else { return [] }
         let item = filtered[row]
-        return [NSTableViewRowAction(style: .destructive, title: "Löschen") { [weak self] _, _ in
+        return [NSTableViewRowAction(style: .destructive, title: L10n.tr("list.delete")) { [weak self] _, _ in
             HistoryStore.shared.delete(item.id)
             self?.applyFilter()
         }]

@@ -1,0 +1,106 @@
+/* Klemmi – ja. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – クリップボード履歴";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "概要を開く…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "Dockに表示";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "パスワードと機密性の高い内容を無視";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "%@でオーバーレイを表示";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "履歴を消去";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "Klemmiを終了";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "こちらのアプリもおすすめ";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "パッケージ全体…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "アプリではなくウインドウ間でAlt+Tab";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Windows 11のスナップレイアウト、Aeroスナップ、スナップアシスト";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "Snipping Tool風のスクリーンショットをクリップボードへ直接";
+
+/* Placeholder of the search field */
+"list.search" = "検索";
+
+/* Shown when the history is empty */
+"list.empty" = "まだ何もコピーされていません";
+
+/* Button: delete all entries */
+"list.clear" = "消去";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "概要…";
+
+/* Deletes a single entry */
+"list.delete" = "削除";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "クリップボードにコピー";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "（空）";
+
+/* Preview title of an image entry */
+"item.image" = "イメージ";
+
+/* Title of the floating overlay */
+"overlay.title" = "クリップボード";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ コピー · esc 閉じる";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – 概要";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "日付";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "アプリ";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "種類";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "すべて";
+
+/* Group header when not grouped */
+"group.all" = "すべて";
+
+/* Group header: text entries */
+"group.text" = "テキスト";
+
+/* Group header: image entries */
+"group.images" = "イメージ";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "不明";
+
+/* Group header: copied today */
+"group.today" = "今日";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "昨日";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "今週";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@（%2$ld）";

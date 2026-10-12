@@ -1,0 +1,106 @@
+/* Klemmi – ko. Keys are shared across all languages; see scripts/check-localizations.sh. */
+
+/* Tooltip of the menu bar icon */
+"statusItem.tooltip" = "Klemmi – 클립보드 기록";
+
+/* Right-click menu: opens the overview window */
+"menu.openOverview" = "개요 열기…";
+
+/* Right-click menu: toggle Dock icon */
+"menu.showInDock" = "Dock에 표시";
+
+/* Right-click menu: skip content flagged as concealed by password managers */
+"menu.ignoreConcealed" = "암호 및 민감한 콘텐츠 무시";
+
+/* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
+"menu.overlayHotKey" = "%@(으)로 오버레이 열기";
+
+/* Right-click menu: delete all entries */
+"menu.clearHistory" = "기록 지우기";
+
+/* Right-click menu: quit the app */
+"menu.quit" = "Klemmi 종료";
+
+/* Right-click menu: submenu with the author's other apps */
+"menu.moreApps" = "마음에 들 만한 다른 앱";
+
+/* More apps submenu: opens the list of all tools in the package */
+"menu.moreApps.package" = "전체 패키지…";
+
+/* Short description of the app Tappi */
+"moreApps.tappi" = "앱이 아닌 윈도우 간 Alt+Tab 전환";
+
+/* Short description of the app Snapline */
+"moreApps.snapline" = "Windows 11의 스냅 레이아웃, Aero Snap 및 스냅 지원";
+
+/* Short description of the app Snapboard */
+"moreApps.snapboard" = "캡처 도구 스타일의 스크린샷을 클립보드로 바로";
+
+/* Placeholder of the search field */
+"list.search" = "검색";
+
+/* Shown when the history is empty */
+"list.empty" = "아직 복사한 항목 없음";
+
+/* Button: delete all entries */
+"list.clear" = "지우기";
+
+/* Popover button: opens the overview window */
+"list.openOverview" = "개요…";
+
+/* Deletes a single entry */
+"list.delete" = "삭제";
+
+/* Overview context menu: put the entry back on the clipboard */
+"context.copy" = "클립보드로 복사";
+
+/* Preview of a text entry that only contains whitespace */
+"item.empty" = "(비어 있음)";
+
+/* Preview title of an image entry */
+"item.image" = "이미지";
+
+/* Title of the floating overlay */
+"overlay.title" = "클립보드";
+
+/* Key hint in the floating overlay */
+"overlay.hint" = "↩ 복사 · esc 닫기";
+
+/* Title of the overview window */
+"overview.windowTitle" = "Klemmi – 개요";
+
+/* Overview segmented control: group by date */
+"grouping.date" = "날짜";
+
+/* Overview segmented control: group by source app */
+"grouping.app" = "앱";
+
+/* Overview segmented control: group by type (text/image) */
+"grouping.type" = "유형";
+
+/* Overview segmented control: no grouping */
+"grouping.all" = "전체";
+
+/* Group header when not grouped */
+"group.all" = "전체";
+
+/* Group header: text entries */
+"group.text" = "텍스트";
+
+/* Group header: image entries */
+"group.images" = "이미지";
+
+/* Group header: entries whose source app is unknown */
+"group.unknownApp" = "알 수 없음";
+
+/* Group header: copied today */
+"group.today" = "오늘";
+
+/* Group header: copied yesterday */
+"group.yesterday" = "어제";
+
+/* Group header: copied within the last seven days */
+"group.thisWeek" = "이번 주";
+
+/* Group header with number of entries; %1$@ is the group name, %2$ld the count */
+"group.titleWithCount" = "%1$@ (%2$ld)";

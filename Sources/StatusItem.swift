@@ -17,7 +17,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         statusItem.isVisible = true
         statusItem.button?.image = Self.menuBarIcon()
         statusItem.button?.imagePosition = .imageOnly
-        statusItem.button?.toolTip = "Klemmi – Zwischenablage-Verlauf"
+        statusItem.button?.toolTip = L10n.tr("statusItem.tooltip")
         statusItem.button?.target = self
         statusItem.button?.action = #selector(click(_:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -59,32 +59,70 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     private func showMenu() {
         let menu = NSMenu()
 
-        menu.addItem(withTitle: "Übersicht öffnen …", action: #selector(openMainWindow), keyEquivalent: "")
+        menu.addItem(withTitle: L10n.tr("menu.openOverview"), action: #selector(openMainWindow), keyEquivalent: "")
         menu.addItem(.separator())
 
-        let dock = NSMenuItem(title: "Im Dock anzeigen", action: #selector(toggleDock), keyEquivalent: "")
+        let dock = NSMenuItem(title: L10n.tr("menu.showInDock"), action: #selector(toggleDock), keyEquivalent: "")
         dock.state = Settings.showInDock ? .on : .off
         menu.addItem(dock)
 
-        let concealed = NSMenuItem(title: "Passwörter & sensible Inhalte ignorieren",
+        let concealed = NSMenuItem(title: L10n.tr("menu.ignoreConcealed"),
                                     action: #selector(toggleConcealed), keyEquivalent: "")
         concealed.state = Settings.ignoreConcealed ? .on : .off
         menu.addItem(concealed)
 
-        let hotKey = NSMenuItem(title: "Overlay per \(OverlayHotKey.displayString)",
+        let hotKey = NSMenuItem(title: L10n.tr("menu.overlayHotKey", OverlayHotKey.displayString),
                                 action: #selector(toggleHotKey), keyEquivalent: "")
         hotKey.state = Settings.overlayHotKeyEnabled ? .on : .off
         menu.addItem(hotKey)
 
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Verlauf leeren", action: #selector(clearHistory), keyEquivalent: "")
+        menu.addItem(withTitle: L10n.tr("menu.clearHistory"), action: #selector(clearHistory), keyEquivalent: "")
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Klemmi beenden", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        let more = NSMenuItem(title: L10n.tr("menu.moreApps"), action: nil, keyEquivalent: "")
+        more.submenu = moreAppsMenu()
+        menu.addItem(more)
+        menu.addItem(.separator())
+        menu.addItem(withTitle: L10n.tr("menu.quit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         menu.items.forEach { if $0.action != #selector(NSApplication.terminate(_:)) { $0.target = self } }
 
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil
+    }
+
+    // MARK: Weitere Apps
+
+    /// Die anderen Tools aus dem Paket „I love macOS, but I miss some Windows features“.
+    private static let siblingApps: [(name: String, descriptionKey: String, url: String)] = [
+        ("Tappi", "moreApps.tappi", "https://github.com/leonatwork/Tappi"),
+        ("Snapline", "moreApps.snapline", "https://github.com/leonatwork/snapline"),
+        ("Snapboard", "moreApps.snapboard", "https://github.com/leonatwork/snapboard"),
+    ]
+    private static let packageURL =
+        "https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories"
+
+    private func moreAppsMenu() -> NSMenu {
+        let sub = NSMenu()
+        for app in Self.siblingApps {
+            let item = NSMenuItem(title: "\(app.name) – \(L10n.tr(app.descriptionKey))",
+                                  action: #selector(openLink(_:)), keyEquivalent: "")
+            item.representedObject = URL(string: app.url)
+            item.target = self
+            sub.addItem(item)
+        }
+        sub.addItem(.separator())
+        let package = NSMenuItem(title: L10n.tr("menu.moreApps.package"),
+                                 action: #selector(openLink(_:)), keyEquivalent: "")
+        package.representedObject = URL(string: Self.packageURL)
+        package.target = self
+        sub.addItem(package)
+        return sub
+    }
+
+    @objc private func openLink(_ sender: NSMenuItem) {
+        guard let url = sender.representedObject as? URL else { return }
+        NSWorkspace.shared.open(url)
     }
 
     @objc private func openMainWindow() {

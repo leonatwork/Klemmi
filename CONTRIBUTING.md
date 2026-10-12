@@ -14,8 +14,9 @@ cd Klemmi
 ./build.sh
 ```
 
-`build.sh` compiles the sources, generates the icon and installs `Klemmi.app` into
-`~/Applications`. Requirements: macOS 13 or later.
+`build.sh` compiles the sources, copies the localizations, generates the icon and places
+`Klemmi.app` in `dist/` (`--install` also copies it into `/Applications`). Requirements:
+macOS 13 or later.
 
 ## Things worth knowing before you change something
 
@@ -29,6 +30,12 @@ cd Klemmi
 - **Sensitive content must stay opt-out, not opt-in.** Password managers mark entries via
   `org.nspasteboard.ConcealedType` / `TransientType`. Klemmi honours that by default, and it
   should stay that way — a clipboard history that silently stores passwords is a liability.
+- **Every UI string is localized.** Klemmi ships in English (development language),
+  German, French, Spanish, Italian, Portuguese (Brazil), Dutch, Japanese, Simplified Chinese
+  and Korean. Use `L10n.tr("semantic.key")` instead of a literal, add the key to every
+  `Resources/<lang>.lproj/Localizable.strings` (plurals go into `Localizable.stringsdict`),
+  follow Apple's own terminology for each language, and run
+  `scripts/check-localizations.sh` before opening a PR.
 - **Everything is stored unencrypted** in `~/Library/Application Support/Klemmi`. If you add
   new data to the store, consider whether it belongs on disk at all.
 
