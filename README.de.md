@@ -22,18 +22,25 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
 ## Screenshots
 
 <div align="center">
-  <img src="docs/screenshots/popover.png" alt="Klemmi-Popover mit Zwischenablage-Verlauf" width="380" />
+  <img src="docs/screenshots/popover.de.png" alt="Klemmi-Popover mit Suche und Zwischenablage-Verlauf" width="420" />
   <br />
-  <em>Menüleisten-Popover — jeder Eintrag zeigt, aus welcher App er stammt</em>
+  <em>Menüleisten-Popover — mit Suche; jeder Eintrag zeigt, aus welcher App er stammt und wann</em>
   <br /><br />
-  <img src="docs/screenshots/overview.png" alt="Klemmi-Übersicht nach App gruppiert" width="440" />
+  <img src="docs/screenshots/overview.de.png" alt="Klemmi-Übersichtsfenster nach App gruppiert" width="536" />
   <br />
-  <em>Übersichtsfenster, gruppiert nach Quell-App</em>
+  <em>Übersichtsfenster, gruppiert nach Quell-App (alternativ nach Datum oder Typ)</em>
 </div>
 
 ## Funktionen
 
 - **Globales Kürzel ⌘⇧C**: öffnet ein schwebendes Overlay mit dem Verlauf auf dem Bildschirm, auf dem die Maus ist – ohne der App, in der man gerade arbeitet, den Fokus zu nehmen. Tippen filtert, ↑/↓ wählt, ↩ legt den Eintrag in die Zwischenablage und schließt das Overlay, esc schließt. Braucht keine Bedienungshilfen-Berechtigung; im Rechtsklick-Menü abschaltbar.
+
+  <div align="center">
+    <img src="docs/screenshots/overlay.de.png" alt="Klemmi-Overlay, geöffnet per Befehl-Umschalt-C" width="516" />
+    <br />
+    <em>Das Overlay per ⌘⇧C — der neueste Eintrag ist vorausgewählt, ↩ kopiert ihn</em>
+  </div>
+
 - **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
 - **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
 - **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
