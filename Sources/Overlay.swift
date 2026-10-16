@@ -122,15 +122,23 @@ final class OverlayController: NSObject, NSWindowDelegate {
         panel.orderOut(nil)
     }
 
-    /// Mittig (leicht nach oben versetzt) auf dem Bildschirm, auf dem der Mauszeiger ist.
+    /// Positioniert das Overlay am Mauszeiger (linke obere Ecke auf Cursorhöhe).
+    ///
+    /// Verhalten wie Kontextmenüs: Wenn rechts oder unten kein Platz ist, wird die
+    /// jeweilige Achse am Cursor gespiegelt. Passt es danach immer noch nicht, wird
+    /// in `screen.visibleFrame` verschoben. Falls kein Bildschirm zur Maus passt,
+    /// wird auf die Mitte von `NSScreen.main.visibleFrame` zurückgefallen.
     private func position() {
         let mouse = NSEvent.mouseLocation
-        let screen = NSScreen.screens.first { NSMouseInRect(mouse, $0.frame, false) } ?? NSScreen.main
-        guard let frame = screen?.visibleFrame else { return }
         let size = panel.frame.size
-        let origin = NSPoint(x: (frame.midX - size.width / 2).rounded(),
-                             y: (frame.midY - size.height / 2 + frame.height * 0.06).rounded())
-        panel.setFrameOrigin(origin)
+
+        if let screen = NSScreen.screens.first(where: { NSMouseInRect(mouse, $0.frame, false) }) {
+            panel.setFrameOrigin(OverlayPositioning.overlayOrigin(mouse: mouse, visibleFrame: screen.visibleFrame, size: size))
+            return
+        }
+
+        guard let visibleFrame = NSScreen.main?.visibleFrame else { return }
+        panel.setFrameOrigin(OverlayPositioning.centeredOrigin(visibleFrame: visibleFrame, size: size))
     }
 
     // MARK: Klicks außerhalb
