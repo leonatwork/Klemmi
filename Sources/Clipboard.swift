@@ -2,17 +2,31 @@ import AppKit
 
 /// Schreibt einen Verlaufseintrag zurück in die Systemzwischenablage.
 enum Clipboard {
-    static func copyToPasteboard(_ item: HistoryItem) {
-        let pb = NSPasteboard.general
-        ClipboardMonitor.shared.ignoreNextChange = true
-        pb.clearContents()
+    @discardableResult
+    static func copyToPasteboard(_ item: HistoryItem, pasteboard pb: NSPasteboard = .general,
+                                 store: HistoryStore = .shared, monitor: ClipboardMonitor = .shared) -> Bool {
+        let payload = NSPasteboardItem()
         switch item.kind {
         case .text:
-            pb.setString(item.text ?? "", forType: .string)
+            guard let text = item.text, payload.setString(text, forType: .string) else {
+                NSSound.beep()
+                return false
+            }
         case .image:
-            guard let image = HistoryStore.shared.image(for: item),
-                  let tiff = image.tiffRepresentation else { return }
-            pb.setData(tiff, forType: .tiff)
+            guard let image = store.image(for: item),
+                  let tiff = image.tiffRepresentation,
+                  payload.setData(tiff, forType: .tiff) else {
+                NSSound.beep()
+                return false
+            }
         }
+        let count = pb.clearContents()
+        guard pb.writeObjects([payload]) else {
+            monitor.ignoredChangeCount = nil
+            NSSound.beep()
+            return false
+        }
+        monitor.ignoredChangeCount = count
+        return true
     }
 }

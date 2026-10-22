@@ -21,6 +21,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ s: NSApplication) -> Bool { false }
 
+    func applicationWillTerminate(_ notification: Notification) {
+        ClipboardMonitor.shared.stopAndCapturePendingChange()
+        HistoryStore.shared.flushPendingWrites()
+    }
+
     func applicationShouldHandleReopen(_ s: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag { mainWindow.showWindow(nil) }
         return true

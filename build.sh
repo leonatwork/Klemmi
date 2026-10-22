@@ -5,12 +5,22 @@ set -euo pipefail
 cd "$(dirname "$0")"
 APP="dist/Klemmi.app"
 
+echo "==> testing history safety and persistence"
+TEST_DIR="$(mktemp -d)"
+trap 'rm -rf "$TEST_DIR"' EXIT
+swiftc Sources/HistorySafety.swift Tests/HistorySafetyTests.swift -o "$TEST_DIR/HistorySafetyTests"
+"$TEST_DIR/HistorySafetyTests"
+swiftc Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift \
+  Sources/HistorySafety.swift Sources/HistoryStore.swift Sources/ClipboardMonitor.swift Sources/Clipboard.swift \
+  Tests/HistoryPersistenceTests.swift -framework AppKit -o "$TEST_DIR/HistoryPersistenceTests"
+"$TEST_DIR/HistoryPersistenceTests"
+
 echo "==> compiling"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
 swiftc -O \
-  Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistoryStore.swift \
+  Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistorySafety.swift Sources/HistoryStore.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
   Sources/MainWindow.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \
