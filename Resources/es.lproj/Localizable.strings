@@ -21,6 +21,30 @@
 /* Right-click menu: quit the app */
 "menu.quit" = "Salir de Klemmi";
 
+/* Main menu: top-level titles */
+"menu.app" = "Klemmi";
+"menu.edit" = "Edición";
+"menu.window" = "Ventana";
+
+/* Main menu: application commands (Quit reuses menu.quit) */
+"menu.about" = "Acerca de Klemmi";
+"menu.hide" = "Ocultar Klemmi";
+"menu.hideOthers" = "Ocultar el resto";
+"menu.showAll" = "Mostrar todo";
+
+/* Main menu: editing commands (Delete reuses list.delete) */
+"menu.undo" = "Deshacer";
+"menu.redo" = "Rehacer";
+"menu.cut" = "Cortar";
+"menu.copy" = "Copiar";
+"menu.paste" = "Pegar";
+"menu.selectAll" = "Seleccionar todo";
+
+/* Main menu: window commands */
+"menu.minimize" = "Minimizar";
+"menu.zoom" = "Zoom";
+"menu.close" = "Cerrar";
+
 /* Right-click menu: submenu with the author's other apps */
 "menu.moreApps" = "Más apps que te pueden gustar";
 

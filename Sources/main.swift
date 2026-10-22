@@ -7,6 +7,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ n: Notification) {
         NSApp.setActivationPolicy(Settings.showInDock ? .regular : .accessory)
+        NSApp.mainMenu = MainMenu.make()
         statusItem = StatusItemController(mainWindow: mainWindow)
         ClipboardMonitor.shared.start()
 
