@@ -26,7 +26,9 @@ private struct ExpectedItem {
 
 private func assertMenu(_ item: NSMenuItem, titleKey: String, entries: [ExpectedItem?]) {
     precondition(item.title == L10n.tr(titleKey), "unlocalized top-level title: \(titleKey)")
-    precondition(item.action == nil && item.keyEquivalent.isEmpty)
+    // AppKit setzt für Einträge mit Untermenü selbst die Aktion submenuAction:.
+    precondition(item.action == nil || item.action == NSSelectorFromString("submenuAction:"))
+    precondition(item.keyEquivalent.isEmpty)
     guard let menu = item.submenu else { preconditionFailure("missing submenu: \(titleKey)") }
     precondition(menu.title == L10n.tr(titleKey), "unlocalized submenu: \(titleKey)")
     precondition(menu.autoenablesItems, "AppKit must validate the responder-chain actions")
