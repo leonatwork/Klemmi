@@ -18,6 +18,12 @@ set -euo pipefail
 printf '%s\n' "$@" > "$ARGUMENTS"
 while (( $# )); do
   if [[ "$1" == -o ]]; then
+    # Test executables built by build.sh's pre-flight step: runnable no-op, always succeeds.
+    if [[ "$(basename "$2")" == *Tests ]]; then
+      printf '#!/bin/sh\nexit 0\n' > "$2"
+      chmod +x "$2"
+      exit 0
+    fi
     printf '%s' "$2" > "$OUTPUT"
     printf 'compiled executable' > "$2"
     exit "$COMPILE_STATUS"
