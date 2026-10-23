@@ -12,6 +12,11 @@ struct Settings {
         get { d.bool(forKey: "showInDock") }
         set { d.set(newValue, forKey: "showInDock") }
     }
+    /// Erststart erledigt; kein gespeicherter Anmeldestatus. Auch bei Fehlern gesetzt.
+    static var loginItemFirstLaunchCompleted: Bool {
+        get { d.bool(forKey: "loginItemFirstLaunchCompleted") }
+        set { d.set(newValue, forKey: "loginItemFirstLaunchCompleted") }
+    }
     /// Respektiert die org.nspasteboard-Konvention, mit der z.B. Passwort-Manager
     /// einzelne Kopiervorgänge als "nicht speichern" markieren.
     static var ignoreConcealed: Bool {

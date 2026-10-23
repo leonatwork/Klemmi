@@ -50,6 +50,11 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
   shortcut, clear history, more apps from the package, quit).
+- **Start at login**: Klemmi registers once on first launch, including the first launch
+  after updating to this feature. After that, use **Start at Login** in the right-click
+  menu; disabling it or a failed first attempt will not trigger automatic re-registration.
+  The checkmark reflects macOS's current status. If approval is needed, click the marked
+  menu item to open Login Items in System Settings. Login launches open no window.
 - **Overview window**: a larger view grouping entries by **date** (today / yesterday / this
   week / older), **app**, or **type** (text / images) — reachable via "Overview…" in the
   popover or the right-click menu.

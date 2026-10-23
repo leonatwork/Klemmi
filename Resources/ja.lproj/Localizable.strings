@@ -9,6 +9,14 @@
 /* Right-click menu: toggle Dock icon */
 "menu.showInDock" = "Dockに表示";
 
+/* Login item: normal title, then title while macOS approval is required */
+"menu.startAtLogin" = "ログイン時に開く";
+"menu.startAtLogin.requiresApproval" = "ログイン時に開く — システム設定で許可…";
+
+/* Alert when registering or unregistering the login item fails */
+"loginItem.error.title" = "ログイン時に開く設定を変更できませんでした";
+"loginItem.error.message" = "Klemmiのログイン項目を変更できませんでした。システム設定でログイン項目を確認してから、Klemmiのメニューでもう一度お試しください。";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "パスワードと機密性の高い内容を無視";
 

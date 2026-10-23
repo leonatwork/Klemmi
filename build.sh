@@ -15,16 +15,23 @@ swiftc Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swif
   Tests/HistoryPersistenceTests.swift -framework AppKit -o "$TEST_DIR/HistoryPersistenceTests"
 "$TEST_DIR/HistoryPersistenceTests"
 
+echo "==> testing login item decisions"
+swiftc -target "$(uname -m)-apple-macosx13.0" \
+  Sources/LoginItemPolicy.swift Tests/LoginItemTests.swift \
+  -framework AppKit -framework ServiceManagement -o "$TEST_DIR/LoginItemTests"
+"$TEST_DIR/LoginItemTests"
+
 echo "==> compiling"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
-swiftc -O \
+swiftc -O -target "$(uname -m)-apple-macosx13.0" \
   Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistorySafety.swift Sources/HistoryStore.swift \
+  Sources/LoginItemPolicy.swift Sources/LoginItem.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
   Sources/MainWindow.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \
-  -framework AppKit -framework Carbon \
+  -framework AppKit -framework Carbon -framework ServiceManagement \
   -o "$APP/Contents/MacOS/Klemmi"
 
 cat > "$APP/Contents/Info.plist" <<'PLIST'

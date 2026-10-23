@@ -9,6 +9,14 @@
 /* Right-click menu: toggle Dock icon */
 "menu.showInDock" = "Toon in Dock";
 
+/* Login item: normal title, then title while macOS approval is required */
+"menu.startAtLogin" = "Open bij inloggen";
+"menu.startAtLogin.requiresApproval" = "Open bij inloggen — Sta toe in Systeeminstellingen…";
+
+/* Alert when registering or unregistering the login item fails */
+"loginItem.error.title" = "Openen bij inloggen kon niet worden gewijzigd";
+"loginItem.error.message" = "Klemmi kon het inlogonderdeel niet wijzigen. Controleer de inlogonderdelen in Systeeminstellingen en probeer het opnieuw via het Klemmi-menu.";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Negeer wachtwoorden en gevoelige inhoud";
 

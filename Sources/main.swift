@@ -17,6 +17,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         OverlayHotKey.shared.onPressed = { [weak self] in self?.overlay.toggle() }
         OverlayHotKey.shared.apply()
+        LoginItem.registerOnFirstLaunch()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ s: NSApplication) -> Bool { false }
