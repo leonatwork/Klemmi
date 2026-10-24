@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Não foi possível alterar a abertura ao iniciar sessão";
 "loginItem.error.message" = "O Klemmi não conseguiu alterar seu item de início de sessão. Verifique os itens de início de sessão nos Ajustes do Sistema e tente novamente pelo menu do Klemmi.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Permitir que o Klemmi cole diretamente?";
+"directPaste.permission.message" = "Com “Colar Diretamente” ativado, ↩ no painel flutuante coloca o item na Área de Transferência e depois envia ⌘V ao app em que você estava trabalhando. O macOS só permite isso com a permissão de Acessibilidade.\n\nEm seguida, permita o Klemmi em Ajustes do Sistema ▸ Privacidade e Segurança ▸ Acessibilidade. Até lá, ↩ apenas copia, como antes.\n\nPara desfazer isso depois, desative “Colar Diretamente” no menu do Klemmi ou remova o Klemmi da lista de Acessibilidade nos Ajustes do Sistema.";
+"directPaste.permission.continue" = "Continuar";
+"directPaste.permission.cancel" = "Cancelar";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignorar senhas e conteúdo confidencial";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Painel flutuante com %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Colar Diretamente";
+"menu.directPaste.requiresApproval" = "Colar Diretamente — Permitir nos Ajustes do Sistema…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Limpar Histórico";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ copiar · esc fechar";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ colar · esc fechar";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Visão Geral";

@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Impossibile modificare l’apertura al login";
 "loginItem.error.message" = "Klemmi non ha potuto modificare il proprio elemento login. Controlla gli elementi login in Impostazioni di Sistema, poi riprova dal menu di Klemmi.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Consentire a Klemmi di incollare direttamente?";
+"directPaste.permission.message" = "Con “Incolla direttamente” attivo, ↩ nel pannello flottante inserisce l’elemento negli Appunti e poi invia ⌘V all’app in cui stavi lavorando. macOS lo consente solo con l’autorizzazione di Accessibilità.\n\nConsenti quindi Klemmi in Impostazioni di Sistema ▸ Privacy e sicurezza ▸ Accessibilità. Fino ad allora, ↩ si limita a copiare, come prima.\n\nPer annullare in seguito, disattiva “Incolla direttamente” nel menu di Klemmi o rimuovi Klemmi dall’elenco Accessibilità in Impostazioni di Sistema.";
+"directPaste.permission.continue" = "Continua";
+"directPaste.permission.cancel" = "Annulla";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignora password e contenuti sensibili";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Pannello flottante con %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Incolla direttamente";
+"menu.directPaste.requiresApproval" = "Incolla direttamente — Consenti in Impostazioni di Sistema…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Cancella cronologia";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ copia · esc chiudi";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ incolla · esc chiudi";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Panoramica";

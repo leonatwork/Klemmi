@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Start bei Anmeldung konnte nicht geändert werden";
 "loginItem.error.message" = "Klemmi konnte sein Anmeldeobjekt nicht ändern. Prüfe die Anmeldeobjekte in den Systemeinstellungen und versuche es danach erneut über das Klemmi-Menü.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Klemmi direkt einfügen lassen?";
+"directPaste.permission.message" = "Mit „Direkt einfügen“ legt ↩ im Overlay den Eintrag in die Zwischenablage und sendet danach ⌘V an die App, in der du gerade gearbeitet hast. macOS erlaubt das nur mit der Berechtigung für Bedienungshilfen.\n\nErlaube Klemmi als Nächstes unter Systemeinstellungen ▸ Datenschutz & Sicherheit ▸ Bedienungshilfen. Bis dahin kopiert ↩ wie bisher nur.\n\nUm das später zurückzunehmen, schalte „Direkt einfügen“ im Klemmi-Menü aus oder entferne Klemmi aus der Liste der Bedienungshilfen in den Systemeinstellungen.";
+"directPaste.permission.continue" = "Fortfahren";
+"directPaste.permission.cancel" = "Abbrechen";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Passwörter & sensible Inhalte ignorieren";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay per %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Direkt einfügen";
+"menu.directPaste.requiresApproval" = "Direkt einfügen – In Systemeinstellungen erlauben …";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Verlauf leeren";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ kopieren · esc schließen";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ einfügen · esc schließen";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Übersicht";

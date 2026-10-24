@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Couldn’t Change Start at Login";
 "loginItem.error.message" = "Klemmi couldn’t change its login item. Check Login Items in System Settings, then try again from Klemmi’s menu.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Allow Klemmi to paste directly?";
+"directPaste.permission.message" = "With “Paste Directly” on, ↩ in the overlay puts the entry on the clipboard and then sends ⌘V to the app you were working in. macOS only allows this with the Accessibility permission.\n\nNext, allow Klemmi under System Settings ▸ Privacy & Security ▸ Accessibility. Until then, ↩ only copies, as before.\n\nTo take this back later, turn off “Paste Directly” in Klemmi’s menu or remove Klemmi from the Accessibility list in System Settings.";
+"directPaste.permission.continue" = "Continue";
+"directPaste.permission.cancel" = "Cancel";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignore Passwords & Sensitive Content";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay via %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Paste Directly";
+"menu.directPaste.requiresApproval" = "Paste Directly — Allow in System Settings…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Clear History";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ copy · esc close";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ paste · esc close";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Overview";

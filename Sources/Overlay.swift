@@ -4,7 +4,8 @@ import AppKit
 /// ↩ und Esc, die nicht schon das Suchfeld verarbeitet hat (z. B. wenn die Tabelle
 /// den Fokus hat), landen hier.
 private final class OverlayPanel: NSPanel {
-    var onReturn: (() -> Void)?
+    /// Parameter: ⌥ war gedrückt (kehrt „Direkt einfügen“ für diesen Eintrag um).
+    var onReturn: ((_ optionHeld: Bool) -> Void)?
     var onEscape: (() -> Void)?
 
     override var canBecomeKey: Bool { true }
@@ -12,7 +13,7 @@ private final class OverlayPanel: NSPanel {
 
     override func keyDown(with event: NSEvent) {
         switch event.keyCode {
-        case 36, 76: onReturn?()   // ↩ und Enter auf dem Ziffernblock
+        case 36, 76: onReturn?(event.modifierFlags.contains(.option))   // ↩ und Enter auf dem Ziffernblock
         case 53: onEscape?()       // Esc
         default: super.keyDown(with: event)
         }
@@ -23,12 +24,14 @@ private final class OverlayPanel: NSPanel {
 
 /// Schwebendes Overlay mit dem Verlauf, geöffnet per ⌘⇧C (das Win+V-Pendant).
 /// Die zuvor aktive App behält den Fokus: Eintrag wählen, Overlay schließt sich,
-/// ⌘V fügt direkt dort ein, wo man gerade war.
+/// ⌘V fügt direkt dort ein, wo man gerade war – auf Wunsch („Direkt einfügen“,
+/// braucht Bedienungshilfen) sendet Klemmi das ⌘V nach ↩ selbst.
 final class OverlayController: NSObject, NSWindowDelegate {
 
     private static let size = NSSize(width: 420, height: 480)
 
     private let panel: OverlayPanel
+    private let hint: NSTextField
     private let listController = HistoryListController()
     private var clickMonitor: Any?
 
@@ -38,6 +41,7 @@ final class OverlayController: NSObject, NSWindowDelegate {
         panel = OverlayPanel(contentRect: NSRect(origin: .zero, size: Self.size),
                              styleMask: [.borderless, .nonactivatingPanel, .fullSizeContentView],
                              backing: .buffered, defer: false)
+        hint = NSTextField(labelWithString: Self.hintText())
         super.init()
 
         panel.delegate = self
@@ -65,7 +69,6 @@ final class OverlayController: NSObject, NSWindowDelegate {
         title.textColor = .secondaryLabelColor
         title.translatesAutoresizingMaskIntoConstraints = false
 
-        let hint = NSTextField(labelWithString: L10n.tr("overlay.hint"))
         hint.font = .systemFont(ofSize: 10.5)
         hint.textColor = .tertiaryLabelColor
         hint.translatesAutoresizingMaskIntoConstraints = false
@@ -88,16 +91,24 @@ final class OverlayController: NSObject, NSWindowDelegate {
         ])
         panel.contentView = effect
 
-        listController.onSelect = { [weak self] item in
-            Clipboard.copyToPasteboard(item)
+        listController.onSelect = { [weak self] item, activation in
+            // Das Recht frisch lesen: Es kann seit dem Einschalten entzogen worden sein (AC-4).
+            let action = DirectPastePolicy.action(enabled: Settings.directPaste,
+                                                  trusted: DirectPaste.isTrusted(),
+                                                  invert: activation.optionHeld,
+                                                  source: activation.source)
+            let copied = Clipboard.copyToPasteboard(item)
             self?.close()
+            if copied, action == .copyAndPaste {
+                DirectPaste.pasteAfterOverlayClosed()
+            }
         }
         listController.onCancel = { [weak self] in self?.close() }
         listController.onOpenFullView = { [weak self] in
             self?.close()
             self?.onOpenFullView?()
         }
-        panel.onReturn = { [weak self] in self?.listController.activateSelection() }
+        panel.onReturn = { [weak self] optionHeld in self?.listController.activateSelection(optionHeld: optionHeld) }
         panel.onEscape = { [weak self] in self?.close() }
     }
 
@@ -110,6 +121,7 @@ final class OverlayController: NSObject, NSWindowDelegate {
     }
 
     func show() {
+        hint.stringValue = Self.hintText()
         listController.resetSearch()
         position()
         panel.makeKeyAndOrderFront(nil)
@@ -120,6 +132,14 @@ final class OverlayController: NSObject, NSWindowDelegate {
     func close() {
         removeClickMonitor()
         panel.orderOut(nil)
+    }
+
+    /// Hinweis je nach Einstellung und Recht, bei jedem Öffnen neu bestimmt (AC-7).
+    private static func hintText() -> String {
+        switch DirectPastePolicy.hint(enabled: Settings.directPaste, trusted: DirectPaste.isTrusted()) {
+        case .copy: return L10n.tr("overlay.hint")
+        case .paste: return L10n.tr("overlay.hint.paste")
+        }
     }
 
     /// Positioniert das Overlay am Mauszeiger (linke obere Ecke auf Cursorhöhe).
