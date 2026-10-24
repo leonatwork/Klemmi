@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Impossible de modifier l’ouverture à la connexion";
 "loginItem.error.message" = "Klemmi n’a pas pu modifier son ouverture à la connexion. Vérifiez les éléments d’ouverture dans Réglages Système, puis réessayez depuis le menu de Klemmi.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Autoriser Klemmi à coller directement ?";
+"directPaste.permission.message" = "Avec « Coller directement », ↩ dans le panneau flottant place l’entrée dans le presse-papiers, puis envoie ⌘V à l’app dans laquelle vous travailliez. macOS ne l’autorise qu’avec l’autorisation d’accessibilité.\n\nAutorisez ensuite Klemmi dans Réglages Système ▸ Confidentialité et sécurité ▸ Accessibilité. D’ici là, ↩ se contente de copier, comme avant.\n\nPour revenir en arrière plus tard, désactivez « Coller directement » dans le menu de Klemmi ou retirez Klemmi de la liste Accessibilité dans Réglages Système.";
+"directPaste.permission.continue" = "Continuer";
+"directPaste.permission.cancel" = "Annuler";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignorer les mots de passe et contenus sensibles";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Panneau flottant avec %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Coller directement";
+"menu.directPaste.requiresApproval" = "Coller directement — Autoriser dans Réglages Système…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Effacer l’historique";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ copier · esc fermer";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ coller · esc fermer";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Vue d’ensemble";

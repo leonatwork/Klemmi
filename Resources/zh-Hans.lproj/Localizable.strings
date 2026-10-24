@@ -17,11 +17,21 @@
 "loginItem.error.title" = "无法更改登录时打开设置";
 "loginItem.error.message" = "Klemmi无法更改其登录项。请在系统设置中检查登录项，然后从Klemmi菜单重试。";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "允许Klemmi直接粘贴？";
+"directPaste.permission.message" = "开启“直接粘贴”后，在浮动面板中按↩会先将条目放入剪贴板，然后向你之前正在使用的App发送⌘V。macOS仅在授予辅助功能权限后才允许此操作。\n\n接下来，请在系统设置 ▸ 隐私与安全性 ▸ 辅助功能中允许Klemmi。在此之前，↩仍像以前一样仅拷贝。\n\n如需日后撤销，请在Klemmi菜单中关闭“直接粘贴”，或在系统设置的辅助功能列表中移除Klemmi。";
+"directPaste.permission.continue" = "继续";
+"directPaste.permission.cancel" = "取消";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "忽略密码和敏感内容";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "使用 %@ 打开浮动面板";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "直接粘贴";
+"menu.directPaste.requiresApproval" = "直接粘贴 — 在系统设置中允许…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "清除历史记录";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ 拷贝 · esc 关闭";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ 粘贴 · esc 关闭";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – 概览";

@@ -28,6 +28,18 @@ struct Settings {
         get { d.object(forKey: "overlayHotKeyEnabled") as? Bool ?? true }
         set { d.set(newValue, forKey: "overlayHotKeyEnabled") }
     }
+    /// ↩ im Overlay sendet zusätzlich ⌘V an die zuvor aktive App (braucht Bedienungshilfen).
+    /// Standard aus: Ohne die Einstellung fragt Klemmi keine Berechtigung ab.
+    static var directPaste: Bool {
+        get { d.bool(forKey: "directPaste") }
+        set { d.set(newValue, forKey: "directPaste") }
+    }
+    /// Die Systemabfrage für Bedienungshilfen wurde schon einmal ausgelöst (macOS zeigt sie
+    /// pro App nur einmal; danach öffnet Klemmi stattdessen die Systemeinstellungen).
+    static var directPastePromptShown: Bool {
+        get { d.bool(forKey: "directPastePromptShown") }
+        set { d.set(newValue, forKey: "directPastePromptShown") }
+    }
     /// Zuletzt gewählte Gruppierung in der Übersicht (Rohwert von GroupingMode).
     static var groupingMode: Int {
         get { d.integer(forKey: "groupingMode") }

@@ -17,11 +17,21 @@
 "loginItem.error.title" = "ログイン時に開く設定を変更できませんでした";
 "loginItem.error.message" = "Klemmiのログイン項目を変更できませんでした。システム設定でログイン項目を確認してから、Klemmiのメニューでもう一度お試しください。";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Klemmiに直接ペーストを許可しますか？";
+"directPaste.permission.message" = "「直接ペースト」をオンにすると、オーバーレイで↩を押したときに項目をクリップボードに入れたあと、作業中だったアプリに⌘Vを送信します。macOSではアクセシビリティの許可がある場合のみ可能です。\n\n続いて、システム設定 ▸ プライバシーとセキュリティ ▸ アクセシビリティでKlemmiを許可してください。許可するまでは、↩はこれまでどおりコピーのみ行います。\n\nあとで取り消すには、Klemmiのメニューで「直接ペースト」をオフにするか、システム設定のアクセシビリティのリストからKlemmiを削除してください。";
+"directPaste.permission.continue" = "続ける";
+"directPaste.permission.cancel" = "キャンセル";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "パスワードと機密性の高い内容を無視";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@でオーバーレイを表示";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "直接ペースト";
+"menu.directPaste.requiresApproval" = "直接ペースト — システム設定で許可…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "履歴を消去";
@@ -73,6 +83,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ コピー · esc 閉じる";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ ペースト · esc 閉じる";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – 概要";

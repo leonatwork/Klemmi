@@ -27,7 +27,8 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         popover.delegate = self
         popover.contentViewController = listController
 
-        listController.onSelect = { [weak self] item in
+        // Im Popover ist Klemmi selbst aktiv; direktes Einfügen gibt es nur im Overlay.
+        listController.onSelect = { [weak self] item, _ in
             Clipboard.copyToPasteboard(item)
             self?.popover.performClose(nil)
         }
@@ -80,6 +81,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
                                 action: #selector(toggleHotKey), keyEquivalent: "")
         hotKey.state = Settings.overlayHotKeyEnabled ? .on : .off
         menu.addItem(hotKey)
+
+        let directPaste = NSMenuItem(title: "", action: #selector(toggleDirectPaste(_:)), keyEquivalent: "")
+        updateDirectPaste(directPaste)
+        menu.addItem(directPaste)
 
         menu.addItem(.separator())
         menu.addItem(withTitle: L10n.tr("menu.clearHistory"), action: #selector(clearHistory), keyEquivalent: "")
@@ -162,6 +167,26 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     @objc private func toggleHotKey() {
         Settings.overlayHotKeyEnabled.toggle()
         OverlayHotKey.shared.apply()
+    }
+
+    /// Das Recht bei jedem Menüaufbau frisch lesen: Ein Entzug in den Systemeinstellungen
+    /// erscheint als gemischter Zustand mit Hinweis (AC-4).
+    private func updateDirectPaste(_ item: NSMenuItem) {
+        let state = DirectPastePolicy.menuState(enabled: Settings.directPaste, trusted: DirectPaste.isTrusted())
+        item.state = state.checkmark
+        item.title = state.checkmark == .mixed
+            ? L10n.tr("menu.directPaste.requiresApproval")
+            : L10n.tr("menu.directPaste")
+    }
+
+    @objc private func toggleDirectPaste(_ sender: NSMenuItem) {
+        switch DirectPastePolicy.menuState(enabled: Settings.directPaste, trusted: DirectPaste.isTrusted()).action {
+        case .disable:
+            Settings.directPaste = false
+        case .request:
+            // Erklärdialog vor der Systemabfrage; Abbruch lässt die Einstellung aus (AC-2).
+            Settings.directPaste = DirectPaste.enable()
+        }
     }
 
     @objc private func clearHistory() { HistoryStore.shared.clear() }

@@ -89,8 +89,14 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
     private let clearButton = NSButton(title: L10n.tr("list.clear"), target: nil, action: nil)
     private let openFullButton = NSButton(title: L10n.tr("list.openOverview"), target: nil, action: nil)
 
+    /// Wie ein Eintrag ausgewählt wurde: per Tastatur (↩, ggf. mit ⌥) oder per Mausklick.
+    struct Activation {
+        let source: DirectPastePolicy.Source
+        let optionHeld: Bool
+    }
+
     private var filtered: [HistoryItem] = []
-    var onSelect: ((HistoryItem) -> Void)?
+    var onSelect: ((HistoryItem, Activation) -> Void)?
     var onOpenFullView: (() -> Void)?
     /// Esc bei leerer Suche (nur im Overlay-Modus).
     var onCancel: (() -> Void)?
@@ -229,15 +235,17 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
         tableView.scrollRowToVisible(next)
     }
 
-    func activateSelection() {
+    /// Auswahl per Tastatur. `optionHeld`: ⌥ war beim ↩ gedrückt (kehrt „Direkt einfügen“ um).
+    func activateSelection(optionHeld: Bool = false) {
         let row = tableView.selectedRow
         guard filtered.indices.contains(row) else { return }
-        onSelect?(filtered[row])
+        onSelect?(filtered[row], Activation(source: .keyboard, optionHeld: optionHeld))
     }
 
     func controlTextDidChange(_ obj: Notification) { applyFilter() }
 
     /// Pfeiltasten, ↩ und Esc im Suchfeld steuern im Overlay-Modus die Liste.
+    /// ⌥↩ kommt über die Standard-Tastenbelegung als insertNewlineIgnoringFieldEditor an.
     func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
         guard keyboardNavigation else { return false }
         switch selector {
@@ -245,8 +253,9 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
             moveSelection(by: 1)
         case #selector(NSResponder.moveUp(_:)):
             moveSelection(by: -1)
-        case #selector(NSResponder.insertNewline(_:)):
-            activateSelection()
+        case #selector(NSResponder.insertNewline(_:)), #selector(NSResponder.insertNewlineIgnoringFieldEditor(_:)):
+            let optionHeld = NSApp.currentEvent?.modifierFlags.contains(.option) ?? false
+            activateSelection(optionHeld: optionHeld)
         case #selector(NSResponder.cancelOperation(_:)):
             if hasSearchText { resetSearch() } else { onCancel?() }
         default:
@@ -257,10 +266,11 @@ final class HistoryListController: NSViewController, NSTableViewDataSource, NSTa
 
     @objc private func clearHistory() { HistoryStore.shared.clear() }
 
+    /// Klick bzw. Doppelklick in der Tabelle: kopiert immer nur, nie direkt einfügen.
     @objc private func rowActivated() {
         let row = tableView.clickedRow >= 0 ? tableView.clickedRow : tableView.selectedRow
         guard filtered.indices.contains(row) else { return }
-        onSelect?(filtered[row])
+        onSelect?(filtered[row], Activation(source: .mouse, optionHeld: false))
     }
 
     // MARK: NSTableViewDataSource / Delegate
