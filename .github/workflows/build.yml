@@ -19,5 +19,11 @@ jobs:
           "$RUNNER_TEMP/MainMenuTests"
       - name: Check localizations
         run: scripts/check-localizations.sh
+      - name: Build contract regression tests
+        run: bash Tests/BuildContractTests.sh
       - name: Build app bundle
         run: ./build.sh
+      - name: Verify binary compatibility and signature
+        run: |
+          bash scripts/check-binary.sh
+          codesign --verify --strict dist/Klemmi.app

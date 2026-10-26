@@ -22,17 +22,22 @@ swiftc -target "$(uname -m)-apple-macosx13.0" \
 "$TEST_DIR/LoginItemTests"
 
 echo "==> compiling"
-rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+BIN=$(mktemp "${TMPDIR:-/tmp}/klemmi-build.XXXXXX")
+trap 'rm -f "$BIN"' EXIT
 
-swiftc -O -target "$(uname -m)-apple-macosx13.0" \
+swiftc -O -target arm64-apple-macos13 \
   Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistorySafety.swift Sources/HistoryStore.swift \
   Sources/LoginItemPolicy.swift Sources/LoginItem.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
   Sources/MainWindow.swift Sources/MainMenu.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \
   -framework AppKit -framework Carbon -framework ServiceManagement \
-  -o "$APP/Contents/MacOS/Klemmi"
+  -o "$BIN"
+
+# Keep an existing bundle intact until compilation succeeds.
+rm -rf "$APP"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+mv "$BIN" "$APP/Contents/MacOS/Klemmi"
 
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

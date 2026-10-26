@@ -5,7 +5,9 @@ images, each with a timestamp and the app the content was copied from. It brings
 `Win`+`V` clipboard history from Windows to macOS.
 
 [![Release](https://img.shields.io/github/v/release/leonatwork/Klemmi?sort=semver)](https://github.com/leonatwork/Klemmi/releases/latest)
-![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
+![Platform: Apple Silicon, macOS 13+](https://img.shields.io/badge/macOS-13%2B_Apple_Silicon-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
+
+Requires **Apple Silicon, macOS 13+**.
 
 *🇩🇪 [Deutsche Version](README.de.md)*
 
