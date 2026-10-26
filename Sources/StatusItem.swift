@@ -1,4 +1,5 @@
 import AppKit
+import ServiceManagement
 
 /// Symbol in der Menüleiste samt Popover mit dem Verlauf.
 final class StatusItemController: NSObject, NSPopoverDelegate {
@@ -65,6 +66,10 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         let dock = NSMenuItem(title: L10n.tr("menu.showInDock"), action: #selector(toggleDock), keyEquivalent: "")
         dock.state = Settings.showInDock ? .on : .off
         menu.addItem(dock)
+
+        let loginItem = NSMenuItem(title: "", action: #selector(toggleLoginItem(_:)), keyEquivalent: "")
+        updateLoginItem(loginItem)
+        menu.addItem(loginItem)
 
         let concealed = NSMenuItem(title: L10n.tr("menu.ignoreConcealed"),
                                     action: #selector(toggleConcealed), keyEquivalent: "")
@@ -138,6 +143,21 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     }
 
     @objc private func toggleConcealed() { Settings.ignoreConcealed.toggle() }
+
+    private func updateLoginItem(_ item: NSMenuItem) {
+        let state = LoginItemPolicy.menuState(for: SMAppService.mainApp.status)
+        item.state = state.checkmark
+        item.title = state.action == .openSettings
+            ? L10n.tr("menu.startAtLogin.requiresApproval")
+            : L10n.tr("menu.startAtLogin")
+    }
+
+    @objc private func toggleLoginItem(_ sender: NSMenuItem) {
+        // Auch beim Klick frisch lesen: Die Systemeinstellungen könnten sich geändert haben.
+        LoginItem.perform(LoginItemPolicy.menuState(for: SMAppService.mainApp.status).action)
+        // Nie optimistisch umschalten, auch nach einem Fehler gilt nur der Systemstatus.
+        updateLoginItem(sender)
+    }
 
     @objc private func toggleHotKey() {
         Settings.overlayHotKeyEnabled.toggle()

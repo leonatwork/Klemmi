@@ -44,6 +44,12 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
   </div>
 
 - **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
+- **Bei Anmeldung starten**: Klemmi meldet sich beim ersten Start einmalig selbst an,
+  auch beim ersten Start nach dem Update auf diese Funktion. Danach steuert **Bei Anmeldung
+  starten** im Rechtsklick-Menü die Anmeldung; nach dem Abschalten oder einem fehlgeschlagenen
+  Erstversuch erfolgt keine erneute automatische Anmeldung. Das Häkchen zeigt den aktuellen
+  macOS-Status. Ist eine Freigabe nötig, öffnet der entsprechend markierte Menüpunkt die
+  Anmeldeobjekte in den Systemeinstellungen. Beim Anmeldestart öffnet sich kein Fenster.
 - **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
 - **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
 - **Suche** über Text und Quell-App, sowohl im Popover als auch im Übersichtsfenster.

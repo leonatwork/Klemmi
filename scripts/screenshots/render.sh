@@ -16,9 +16,10 @@ echo "==> compiling harness"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 SOURCES=()
+# Includes LoginItemPolicy.swift and LoginItem.swift; main.swift alone owns auto-registration.
 for f in Sources/*.swift; do [[ "$f" == Sources/main.swift ]] || SOURCES+=("$f"); done
-swiftc -O "${SOURCES[@]}" scripts/screenshots/ScreenshotHarness.swift \
-  -framework AppKit -framework Carbon \
+swiftc -O -target "$(uname -m)-apple-macosx13.0" "${SOURCES[@]}" scripts/screenshots/ScreenshotHarness.swift \
+  -framework AppKit -framework Carbon -framework ServiceManagement \
   -o "$APP/Contents/MacOS/KlemmiScreenshots"
 
 cat > "$APP/Contents/Info.plist" <<'PLIST'
