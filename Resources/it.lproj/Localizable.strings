@@ -9,6 +9,14 @@
 /* Right-click menu: toggle Dock icon */
 "menu.showInDock" = "Mostra nel Dock";
 
+/* Login item: normal title, then title while macOS approval is required */
+"menu.startAtLogin" = "Apri al login";
+"menu.startAtLogin.requiresApproval" = "Apri al login — Consenti in Impostazioni di Sistema…";
+
+/* Alert when registering or unregistering the login item fails */
+"loginItem.error.title" = "Impossibile modificare l’apertura al login";
+"loginItem.error.message" = "Klemmi non ha potuto modificare il proprio elemento login. Controlla gli elementi login in Impostazioni di Sistema, poi riprova dal menu di Klemmi.";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignora password e contenuti sensibili";
 

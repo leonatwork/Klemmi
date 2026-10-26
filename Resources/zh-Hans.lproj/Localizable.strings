@@ -9,6 +9,14 @@
 /* Right-click menu: toggle Dock icon */
 "menu.showInDock" = "在程序坞中显示";
 
+/* Login item: normal title, then title while macOS approval is required */
+"menu.startAtLogin" = "登录时打开";
+"menu.startAtLogin.requiresApproval" = "登录时打开 — 在系统设置中允许…";
+
+/* Alert when registering or unregistering the login item fails */
+"loginItem.error.title" = "无法更改登录时打开设置";
+"loginItem.error.message" = "Klemmi无法更改其登录项。请在系统设置中检查登录项，然后从Klemmi菜单重试。";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "忽略密码和敏感内容";
 

@@ -4,6 +4,7 @@ Klemmi is a small native macOS app that keeps a searchable clipboard history —
 images, each with a timestamp and the app the content was copied from. It brings the
 `Win`+`V` clipboard history from Windows to macOS.
 
+[![Release](https://img.shields.io/github/v/release/leonatwork/Klemmi?sort=semver)](https://github.com/leonatwork/Klemmi/releases/latest)
 ![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
 
 *🇩🇪 [Deutsche Version](README.de.md)*
@@ -50,6 +51,11 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
   shortcut, clear history, more apps from the package, quit).
+- **Start at login**: Klemmi registers once on first launch, including the first launch
+  after updating to this feature. After that, use **Start at Login** in the right-click
+  menu; disabling it or a failed first attempt will not trigger automatic re-registration.
+  The checkmark reflects macOS's current status. If approval is needed, click the marked
+  menu item to open Login Items in System Settings. Login launches open no window.
 - **Overview window**: a larger view grouping entries by **date** (today / yesterday / this
   week / older), **app**, or **type** (text / images) — reachable via "Overview…" in the
   popover or the right-click menu.
@@ -82,7 +88,7 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 
 ## Installation
 
-1. Download `Klemmi-<version>.zip` from the
+1. Download `Klemmi-<version>.zip` (the version is shown in the release badge above) from the
    [latest release](https://github.com/leonatwork/Klemmi/releases/latest).
 2. Unzip it and move `Klemmi.app` into your `Applications` folder.
 3. Open it once via **right-click ▸ Open**. The builds are signed but not notarised, so

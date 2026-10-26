@@ -10,28 +10,42 @@ final class ClipboardMonitor {
     private static let transientType = NSPasteboard.PasteboardType(rawValue: "org.nspasteboard.TransientType")
 
     private var timer: Timer?
-    private var lastChangeCount = NSPasteboard.general.changeCount
+    private let pasteboard: NSPasteboard
+    private let store: HistoryStore
+    private var lastChangeCount: Int
 
     /// Wird kurz gesetzt, wenn Klemmi selbst etwas in die Zwischenablage schreibt,
     /// damit dieser Schreibvorgang nicht als neuer Verlaufseintrag erfasst wird.
-    var ignoreNextChange = false
+    var ignoredChangeCount: Int?
+
+    init(pasteboard: NSPasteboard = .general, store: HistoryStore = .shared) {
+        self.pasteboard = pasteboard
+        self.store = store
+        lastChangeCount = pasteboard.changeCount
+    }
 
     func start() {
-        lastChangeCount = NSPasteboard.general.changeCount
+        lastChangeCount = pasteboard.changeCount
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
             self?.poll()
         }
     }
 
-    private func poll() {
-        let pb = NSPasteboard.general
-        guard pb.changeCount != lastChangeCount else { return }
-        lastChangeCount = pb.changeCount
+    func stopAndCapturePendingChange() {
+        timer?.invalidate()
+        timer = nil
+        poll()
+    }
 
-        if ignoreNextChange {
-            ignoreNextChange = false
-            return
-        }
+    func poll() {
+        let pb = pasteboard
+        let count = pb.changeCount
+        guard count != lastChangeCount else { return }
+        let capture = HistorySafety.shouldCapture(changeCount: count, lastChangeCount: lastChangeCount,
+                                                  ignoredChangeCount: ignoredChangeCount)
+        lastChangeCount = count
+        ignoredChangeCount = nil
+        guard capture else { return }
 
         let types = pb.types ?? []
         if Settings.ignoreConcealed,
@@ -44,11 +58,10 @@ final class ClipboardMonitor {
         let sourceBundle = app?.bundleIdentifier
 
         if types.contains(.tiff) || types.contains(Self.pngType),
-           let data = pb.data(forType: Self.pngType) ?? pb.data(forType: .tiff),
-           let image = NSImage(data: data) {
-            HistoryStore.shared.addImage(image, sourceAppName: sourceName, sourceBundleID: sourceBundle)
+            let data = pb.data(forType: Self.pngType) ?? pb.data(forType: .tiff) {
+            store.addImage(data, sourceAppName: sourceName, sourceBundleID: sourceBundle)
         } else if let text = pb.string(forType: .string), !text.isEmpty {
-            HistoryStore.shared.addText(text, sourceAppName: sourceName, sourceBundleID: sourceBundle)
+            store.addText(text, sourceAppName: sourceName, sourceBundleID: sourceBundle)
         }
     }
 }

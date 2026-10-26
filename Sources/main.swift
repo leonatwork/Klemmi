@@ -18,9 +18,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
         OverlayHotKey.shared.onPressed = { [weak self] in self?.overlay.toggle() }
         OverlayHotKey.shared.apply()
+        LoginItem.registerOnFirstLaunch()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ s: NSApplication) -> Bool { false }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        ClipboardMonitor.shared.stopAndCapturePendingChange()
+        HistoryStore.shared.flushPendingWrites()
+    }
 
     func applicationShouldHandleReopen(_ s: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag { mainWindow.showWindow(nil) }
