@@ -89,10 +89,10 @@ enum DirectPaste {
                     guard let layout = buffer.baseAddress?.assumingMemoryBound(to: UCKeyboardLayout.self) else { return nil }
                     var deadKeyState: UInt32 = 0
                     var chars = [UniChar](repeating: 0, count: 4)
-                    var length = UniCharCount(0)
+                    var length = 0
                     let status = UCKeyTranslate(layout, code, UInt16(kUCKeyActionDown), 0, keyboardType,
                                                 OptionBits(kUCKeyTranslateNoDeadKeysMask),
-                                                &deadKeyState, UniCharCount(chars.count), &length, &chars)
+                                                &deadKeyState, chars.count, &length, &chars)
                     guard status == noErr, length > 0 else { return nil }
                     return String(utf16CodeUnits: chars, count: Int(length))
                 }
