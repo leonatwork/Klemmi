@@ -17,11 +17,21 @@
 "loginItem.error.title" = "No se ha podido cambiar el inicio de sesión";
 "loginItem.error.message" = "Klemmi no ha podido modificar su ítem de inicio. Comprueba los ítems de inicio en Ajustes del Sistema y vuelve a intentarlo desde el menú de Klemmi.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "¿Permitir que Klemmi pegue directamente?";
+"directPaste.permission.message" = "Con «Pegar directamente» activado, ↩ en el panel flotante coloca la entrada en el portapapeles y después envía ⌘V a la app en la que estabas trabajando. macOS solo lo permite con el permiso de Accesibilidad.\n\nA continuación, permite Klemmi en Ajustes del Sistema ▸ Privacidad y seguridad ▸ Accesibilidad. Hasta entonces, ↩ solo copia, como antes.\n\nPara revertirlo más adelante, desactiva «Pegar directamente» en el menú de Klemmi o elimina Klemmi de la lista de Accesibilidad en Ajustes del Sistema.";
+"directPaste.permission.continue" = "Continuar";
+"directPaste.permission.cancel" = "Cancelar";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignorar contraseñas y contenido confidencial";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Panel flotante con %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Pegar directamente";
+"menu.directPaste.requiresApproval" = "Pegar directamente — Permitir en Ajustes del Sistema…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Borrar historial";
@@ -97,6 +107,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ copiar · esc cerrar";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ pegar · esc cerrar";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Vista general";

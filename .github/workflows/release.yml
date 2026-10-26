@@ -96,8 +96,10 @@ jobs:
           xattr -dr com.apple.quarantine /Applications/Klemmi.app
           ```
 
-          Klemmi needs no special permissions — it reads the clipboard, which macOS
-          does not gate behind a privacy prompt.
+          Klemmi needs no special permissions by default — it reads the clipboard, which
+          macOS does not gate behind a privacy prompt. Only the optional **Paste Directly**
+          setting (right-click menu) asks for the Accessibility permission so that ↩ in the
+          overlay can send ⌘V to the app you were working in.
 
           Full changes: [README](https://github.com/leonatwork/Klemmi#readme)
           EOF

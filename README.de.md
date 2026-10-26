@@ -43,7 +43,8 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
     <em>Das Overlay per ⌘⇧C — der neueste Eintrag ist vorausgewählt, ↩ kopiert ihn</em>
   </div>
 
-- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
+- **Direkt einfügen** (optional, standardmäßig aus): Ist **Direkt einfügen** im Rechtsklick-Menü eingeschaltet, sendet ↩ im Overlay zusätzlich ⌘V an die App, in der man gerade gearbeitet hat – wie bei Win+V. ⌥↩ macht für diesen einen Eintrag das Gegenteil der Einstellung; Mausklicks kopieren immer nur. Das ist die einzige Funktion, die die Berechtigung für **Bedienungshilfen** braucht: Klemmi erklärt vorher, warum, bevor macOS fragt, und der Hinweis im Overlay zeigt, ob ↩ einfügt oder kopiert. Fehlt das Recht oder wird es entzogen, kopiert ↩ wieder nur, und der Menüpunkt verweist auf die Systemeinstellungen. Die Taste „V“ wird in der aktiven Tastaturbelegung gesucht, funktioniert also auch mit Dvorak und anderen Belegungen.
+- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Direkt einfügen, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
 - **Bei Anmeldung starten**: Klemmi meldet sich beim ersten Start einmalig selbst an,
   auch beim ersten Start nach dem Update auf diese Funktion. Danach steuert **Bei Anmeldung
   starten** im Rechtsklick-Menü die Anmeldung; nach dem Abschalten oder einem fehlgeschlagenen
@@ -53,7 +54,7 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
 - **Übersichtsfenster**: größere Fensteransicht mit Gruppierung nach **Datum** (Heute/Gestern/Diese Woche/älter), **App** oder **Typ** (Text/Bilder) – erreichbar über „Übersicht …“ im Popover oder Rechtsklick-Menü.
 - **Erfasst Text und Bilder** aus der Zwischenablage – jeder Eintrag zeigt, aus welcher App er stammt (Name + Icon) sowie eine relative Zeitangabe.
 - **Suche** über Text und Quell-App, sowohl im Popover als auch im Übersichtsfenster.
-- **Zurück in die Zwischenablage**: Doppelklick auf einen Eintrag (bzw. Rechtsklick → „In Zwischenablage kopieren“ im Übersichtsfenster) kopiert ihn wieder in die Zwischenablage (Einfügen erfolgt manuell per ⌘V).
+- **Zurück in die Zwischenablage**: Doppelklick auf einen Eintrag (bzw. Rechtsklick → „In Zwischenablage kopieren“ im Übersichtsfenster) kopiert ihn wieder in die Zwischenablage (Einfügen erfolgt manuell per ⌘V, sofern nicht **Direkt einfügen** für das Overlay eingeschaltet ist).
 - **Persistenz**: Verlauf liegt unter `~/Library/Application Support/Klemmi` (Bilder als PNG, Metadaten als JSON) und übersteht einen Neustart der App.
 - **Begrenzung**: Standardmäßig die letzten 200 Einträge, ältere fallen automatisch raus (samt zugehöriger Bilddatei).
 - **Respektiert Passwort-Manager**: Inhalte, die per `org.nspasteboard.ConcealedType`/`TransientType`-Konvention als sensibel markiert sind (z. B. aus 1Password), werden standardmäßig nicht gespeichert (abschaltbar).
@@ -62,7 +63,7 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
 ### Bekannte Grenzen (v1)
 
 - Die Quell-App wird über die zum Zeitpunkt des Kopierens vorderste App ermittelt (macOS liefert keine direkte Quellangabe über die Zwischenablage) – in der Regel zuverlässig, aber kein Systemgarantie.
-- Kein automatisches Einfügen per Tastenkombination (würde Bedienungshilfen-Rechte erfordern) – ein Eintrag landet nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
+- Automatisches Einfügen gibt es nur per ↩ im Overlay und nur mit Bedienungshilfen-Berechtigung. Aus dem Popover und dem Übersichtsfenster landet ein Eintrag nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
 - Das Overlay-Kürzel ist fest auf ⌘⇧C eingestellt und noch nicht änderbar.
 
 ## Installation
@@ -80,8 +81,11 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
    xattr -dr com.apple.quarantine /Applications/Klemmi.app
    ```
 
-Klemmi braucht keine besonderen Berechtigungen – das Lesen der Zwischenablage ist unter
-macOS nicht hinter einer Datenschutzabfrage verborgen.
+Klemmi braucht standardmäßig keine besonderen Berechtigungen – das Lesen der Zwischenablage
+ist unter macOS nicht hinter einer Datenschutzabfrage verborgen. Nur die optionale Einstellung
+**Direkt einfügen** fragt nach der Berechtigung für Bedienungshilfen, weil das Senden von ⌘V an
+eine andere App sie erfordert. Sie lässt sich jederzeit unter **Systemeinstellungen ▸
+Datenschutz & Sicherheit ▸ Bedienungshilfen** entziehen; Klemmi kopiert dann wieder nur.
 
 ## Aus dem Quellcode bauen
 
@@ -104,6 +108,8 @@ Das Skript kompiliert die Quellen, kopiert die Übersetzungen, erzeugt das App-S
 | `Sources/StatusItem.swift` | Menüleisten-Symbol, Popover, Kontextmenü |
 | `Sources/Overlay.swift` | Schwebendes Overlay, geöffnet per globalem Kürzel |
 | `Sources/HotKey.swift` | Globales Kürzel ⌘⇧C über die Carbon-Hotkey-API |
+| `Sources/DirectPastePolicy.swift` | Reine Entscheidungen für „Direkt einfügen“ (Einstellung, Recht, ⌥, Tastatur/Maus) |
+| `Sources/DirectPaste.swift` | Bedienungshilfen-Recht, Erklärdialog, sendet ⌘V per CGEvent |
 | `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche (Popover) |
 | `Sources/MainWindow.swift` | Übersichtsfenster mit Gruppierung nach Datum/App/Typ |
 | `Sources/ClipboardMonitor.swift` | Pollt die Zwischenablage, erkennt Quell-App |

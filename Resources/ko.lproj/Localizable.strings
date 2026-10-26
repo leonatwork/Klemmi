@@ -17,11 +17,21 @@
 "loginItem.error.title" = "로그인 시 열기 설정을 변경할 수 없습니다";
 "loginItem.error.message" = "Klemmi의 로그인 항목을 변경할 수 없습니다. 시스템 설정에서 로그인 항목을 확인한 다음 Klemmi 메뉴에서 다시 시도하십시오.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Klemmi가 바로 붙여넣도록 허용하시겠습니까?";
+"directPaste.permission.message" = "‘바로 붙여넣기’를 켜면 오버레이에서 ↩을 눌렀을 때 항목을 클립보드에 넣은 다음, 작업 중이던 앱에 ⌘V를 보냅니다. macOS에서는 손쉬운 사용 권한이 있어야만 가능합니다.\n\n다음으로 시스템 설정 ▸ 개인정보 보호 및 보안 ▸ 손쉬운 사용에서 Klemmi를 허용하십시오. 허용 전까지 ↩은 이전처럼 복사만 합니다.\n\n나중에 취소하려면 Klemmi 메뉴에서 ‘바로 붙여넣기’를 끄거나 시스템 설정의 손쉬운 사용 목록에서 Klemmi를 제거하십시오.";
+"directPaste.permission.continue" = "계속";
+"directPaste.permission.cancel" = "취소";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "암호 및 민감한 콘텐츠 무시";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@(으)로 오버레이 열기";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "바로 붙여넣기";
+"menu.directPaste.requiresApproval" = "바로 붙여넣기 — 시스템 설정에서 허용…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "기록 지우기";
@@ -97,6 +107,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ 복사 · esc 닫기";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ 붙여넣기 · esc 닫기";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – 개요";

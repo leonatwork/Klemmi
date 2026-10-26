@@ -21,6 +21,12 @@ swiftc -target "$(uname -m)-apple-macosx13.0" \
   -framework AppKit -framework ServiceManagement -o "$TEST_DIR/LoginItemTests"
 "$TEST_DIR/LoginItemTests"
 
+echo "==> testing direct paste decisions"
+swiftc -target "$(uname -m)-apple-macosx13.0" \
+  Sources/DirectPastePolicy.swift Tests/DirectPasteTests.swift \
+  -framework AppKit -o "$TEST_DIR/DirectPasteTests"
+"$TEST_DIR/DirectPasteTests"
+
 echo "==> compiling"
 BIN=$(mktemp "${TMPDIR:-/tmp}/klemmi-build.XXXXXX")
 trap 'rm -f "$BIN"' EXIT
@@ -28,6 +34,7 @@ trap 'rm -f "$BIN"' EXIT
 swiftc -O -target arm64-apple-macos13 \
   Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistorySafety.swift Sources/HistoryStore.swift \
   Sources/LoginItemPolicy.swift Sources/LoginItem.swift \
+  Sources/DirectPastePolicy.swift Sources/DirectPaste.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
   Sources/MainWindow.swift Sources/MainMenu.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \

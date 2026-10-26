@@ -50,9 +50,18 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
     <em>The <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> overlay — the newest entry is preselected, <kbd>↩</kbd> copies it</em>
   </div>
 
+- **Paste directly** (optional, off by default): with **Paste Directly** enabled in the
+  right-click menu, <kbd>↩</kbd> in the overlay also sends <kbd>⌘</kbd><kbd>V</kbd> to the
+  app you were working in — like <kbd>Win</kbd>+<kbd>V</kbd>. <kbd>⌥</kbd><kbd>↩</kbd> does
+  the opposite of the setting for that one entry; mouse clicks always only copy. This is the
+  one feature that needs the **Accessibility** permission: Klemmi explains why before macOS
+  asks, and the hint in the overlay shows whether <kbd>↩</kbd> pastes or copies. If the
+  permission is missing or revoked, <kbd>↩</kbd> falls back to copying and the menu item
+  points to System Settings. The "v" key is looked up in the active keyboard layout, so it
+  works with Dvorak and other layouts too.
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
-  shortcut, clear history, more apps from the package, quit).
+  shortcut, paste directly, clear history, more apps from the package, quit).
 - **Start at login**: Klemmi registers once on first launch, including the first launch
   after updating to this feature. After that, use **Start at Login** in the right-click
   menu; disabling it or a failed first attempt will not trigger automatic re-registration.
@@ -65,7 +74,8 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
   (name and icon) plus a relative timestamp.
 - **Search** across text and source app, both in the popover and the overview window.
 - **Back to the clipboard**: double-click an entry (or right-click ▸ copy to clipboard in
-  the overview) to put it back on the clipboard. Pasting stays manual via <kbd>⌘</kbd><kbd>V</kbd>.
+  the overview) to put it back on the clipboard. Pasting stays manual via <kbd>⌘</kbd><kbd>V</kbd>
+  unless **Paste Directly** is enabled for the overlay.
 - **Persistence**: the history lives in `~/Library/Application Support/Klemmi` (images as
   PNG, metadata as JSON) and survives a restart of the app.
 - **Bounded**: the most recent 200 entries by default; older ones drop out automatically
@@ -82,9 +92,9 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 - The source app is determined from whichever app was frontmost at the moment of copying —
   macOS provides no direct attribution through the clipboard. Reliable in practice, but not
   guaranteed by the system.
-- No automatic pasting via a keyboard shortcut, which would require Accessibility
-  permissions. An entry is only placed on the clipboard; pasting stays
-  <kbd>⌘</kbd><kbd>V</kbd>.
+- Automatic pasting is limited to <kbd>↩</kbd> in the overlay and needs the Accessibility
+  permission. From the popover and the overview window an entry is only placed on the
+  clipboard; pasting stays <kbd>⌘</kbd><kbd>V</kbd>.
 - The overlay shortcut is fixed to <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> and cannot be
   changed yet.
 
@@ -103,8 +113,11 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
    xattr -dr com.apple.quarantine /Applications/Klemmi.app
    ```
 
-Klemmi needs no special permissions — macOS does not gate reading the clipboard behind a
-privacy prompt.
+Klemmi needs no special permissions by default — macOS does not gate reading the clipboard
+behind a privacy prompt. Only the optional **Paste Directly** setting asks for the
+Accessibility permission, because sending <kbd>⌘</kbd><kbd>V</kbd> to another app requires
+it. You can revoke it at any time under **System Settings ▸ Privacy & Security ▸
+Accessibility**; Klemmi then goes back to copying only.
 
 ## Building from source
 
@@ -137,6 +150,8 @@ would rather it did not persist.
 | `Sources/StatusItem.swift` | Menu bar icon, popover, context menu |
 | `Sources/Overlay.swift` | Floating overlay opened by the global shortcut |
 | `Sources/HotKey.swift` | Global shortcut ⌘⇧C via the Carbon hotkey API |
+| `Sources/DirectPastePolicy.swift` | Pure decisions for Paste Directly (setting, permission, ⌥, keyboard/mouse) |
+| `Sources/DirectPaste.swift` | Accessibility permission, explanation dialog, sends ⌘V via CGEvent |
 | `Sources/HistoryList.swift` | Table view of the history including search (popover) |
 | `Sources/MainWindow.swift` | Overview window grouped by date / app / type |
 | `Sources/ClipboardMonitor.swift` | Polls the clipboard, identifies the source app |

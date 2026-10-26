@@ -17,11 +17,21 @@
 "loginItem.error.title" = "Openen bij inloggen kon niet worden gewijzigd";
 "loginItem.error.message" = "Klemmi kon het inlogonderdeel niet wijzigen. Controleer de inlogonderdelen in Systeeminstellingen en probeer het opnieuw via het Klemmi-menu.";
 
+/* Explanation shown before macOS asks for the Accessibility permission (Paste Directly) */
+"directPaste.permission.title" = "Klemmi direct laten plakken?";
+"directPaste.permission.message" = "Met ‘Direct plakken’ zet ↩ in het zwevende paneel het onderdeel op het klembord en stuurt daarna ⌘V naar de app waarin je aan het werk was. macOS staat dit alleen toe met de toestemming voor Toegankelijkheid.\n\nSta Klemmi hierna toe onder Systeeminstellingen ▸ Privacy en beveiliging ▸ Toegankelijkheid. Tot die tijd kopieert ↩ alleen, zoals voorheen.\n\nOm dit later ongedaan te maken, schakel je ‘Direct plakken’ uit in het Klemmi-menu of verwijder je Klemmi uit de lijst Toegankelijkheid in Systeeminstellingen.";
+"directPaste.permission.continue" = "Ga door";
+"directPaste.permission.cancel" = "Annuleer";
+
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Negeer wachtwoorden en gevoelige inhoud";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Zwevend paneel met %@";
+
+/* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
+"menu.directPaste" = "Direct plakken";
+"menu.directPaste.requiresApproval" = "Direct plakken — Sta toe in Systeeminstellingen…";
 
 /* Right-click menu: delete all entries */
 "menu.clearHistory" = "Wis geschiedenis";
@@ -97,6 +107,9 @@
 
 /* Key hint in the floating overlay */
 "overlay.hint" = "↩ kopieer · esc sluit";
+
+/* Key hint in the overlay while Paste Directly is on and allowed (↩ pastes) */
+"overlay.hint.paste" = "↩ plak · esc sluit";
 
 /* Title of the overview window */
 "overview.windowTitle" = "Klemmi – Overzicht";
