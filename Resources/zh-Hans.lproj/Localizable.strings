@@ -39,6 +39,30 @@
 /* Right-click menu: quit the app */
 "menu.quit" = "退出 Klemmi";
 
+/* Main menu: top-level titles */
+"menu.app" = "Klemmi";
+"menu.edit" = "编辑";
+"menu.window" = "窗口";
+
+/* Main menu: application commands (Quit reuses menu.quit) */
+"menu.about" = "关于 Klemmi";
+"menu.hide" = "隐藏 Klemmi";
+"menu.hideOthers" = "隐藏其他";
+"menu.showAll" = "全部显示";
+
+/* Main menu: editing commands (Delete reuses list.delete) */
+"menu.undo" = "撤销";
+"menu.redo" = "重做";
+"menu.cut" = "剪切";
+"menu.copy" = "拷贝";
+"menu.paste" = "粘贴";
+"menu.selectAll" = "全选";
+
+/* Main menu: window commands */
+"menu.minimize" = "最小化";
+"menu.zoom" = "缩放";
+"menu.close" = "关闭";
+
 /* Right-click menu: submenu with the author's other apps */
 "menu.moreApps" = "你可能也会喜欢的 App";
 

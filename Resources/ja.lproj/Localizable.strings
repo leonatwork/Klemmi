@@ -39,6 +39,30 @@
 /* Right-click menu: quit the app */
 "menu.quit" = "Klemmiを終了";
 
+/* Main menu: top-level titles */
+"menu.app" = "Klemmi";
+"menu.edit" = "編集";
+"menu.window" = "ウインドウ";
+
+/* Main menu: application commands (Quit reuses menu.quit) */
+"menu.about" = "Klemmiについて";
+"menu.hide" = "Klemmiを非表示";
+"menu.hideOthers" = "ほかを非表示";
+"menu.showAll" = "すべてを表示";
+
+/* Main menu: editing commands (Delete reuses list.delete) */
+"menu.undo" = "取り消す";
+"menu.redo" = "やり直す";
+"menu.cut" = "カット";
+"menu.copy" = "コピー";
+"menu.paste" = "ペースト";
+"menu.selectAll" = "すべてを選択";
+
+/* Main menu: window commands */
+"menu.minimize" = "しまう";
+"menu.zoom" = "拡大／縮小";
+"menu.close" = "閉じる";
+
 /* Right-click menu: submenu with the author's other apps */
 "menu.moreApps" = "こちらのアプリもおすすめ";
 

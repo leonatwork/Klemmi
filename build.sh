@@ -36,7 +36,7 @@ swiftc -O -target "$(uname -m)-apple-macosx13.0" \
   Sources/LoginItemPolicy.swift Sources/LoginItem.swift \
   Sources/DirectPastePolicy.swift Sources/DirectPaste.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
-  Sources/MainWindow.swift Sources/StatusItem.swift Sources/HotKey.swift \
+  Sources/MainWindow.swift Sources/MainMenu.swift Sources/StatusItem.swift Sources/HotKey.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \
   -framework AppKit -framework Carbon -framework ServiceManagement \
   -o "$APP/Contents/MacOS/Klemmi"

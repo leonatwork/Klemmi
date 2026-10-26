@@ -39,6 +39,30 @@
 /* Right-click menu: quit the app */
 "menu.quit" = "Klemmi 종료";
 
+/* Main menu: top-level titles */
+"menu.app" = "Klemmi";
+"menu.edit" = "편집";
+"menu.window" = "윈도우";
+
+/* Main menu: application commands (Quit reuses menu.quit) */
+"menu.about" = "Klemmi에 관하여";
+"menu.hide" = "Klemmi 가리기";
+"menu.hideOthers" = "기타 가리기";
+"menu.showAll" = "모두 보기";
+
+/* Main menu: editing commands (Delete reuses list.delete) */
+"menu.undo" = "실행 취소";
+"menu.redo" = "실행 복귀";
+"menu.cut" = "오려두기";
+"menu.copy" = "복사하기";
+"menu.paste" = "붙여넣기";
+"menu.selectAll" = "모두 선택";
+
+/* Main menu: window commands */
+"menu.minimize" = "최소화";
+"menu.zoom" = "확대/축소";
+"menu.close" = "닫기";
+
 /* Right-click menu: submenu with the author's other apps */
 "menu.moreApps" = "마음에 들 만한 다른 앱";
 
