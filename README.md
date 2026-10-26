@@ -4,6 +4,7 @@ Klemmi is a small native macOS app that keeps a searchable clipboard history —
 images, each with a timestamp and the app the content was copied from. It brings the
 `Win`+`V` clipboard history from Windows to macOS.
 
+[![Release](https://img.shields.io/github/v/release/leonatwork/Klemmi?sort=semver)](https://github.com/leonatwork/Klemmi/releases/latest)
 ![Platform](https://img.shields.io/badge/macOS-13%2B-blue) ![Language](https://img.shields.io/badge/Swift-AppKit-orange) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
 
 *🇩🇪 [Deutsche Version](README.de.md)*
@@ -87,7 +88,7 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 
 ## Installation
 
-1. Download `Klemmi-<version>.zip` from the
+1. Download `Klemmi-<version>.zip` (the version is shown in the release badge above) from the
    [latest release](https://github.com/leonatwork/Klemmi/releases/latest).
 2. Unzip it and move `Klemmi.app` into your `Applications` folder.
 3. Open it once via **right-click ▸ Open**. The builds are signed but not notarised, so
