@@ -40,11 +40,19 @@ jobs:
           echo "CODESIGN_IDENTITY=leonatwork Code Signing" >> "$GITHUB_ENV"
           echo "signed=true" >> "$GITHUB_OUTPUT"
 
+      - name: Build contract regression tests
+        run: bash Tests/BuildContractTests.sh
+
       - name: Build
         env:
           # Tag builds use the tag; manual builds fall back to the newest tag in build.sh.
           VERSION: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
         run: ./build.sh
+
+      - name: Verify binary compatibility and signature
+        run: |
+          bash scripts/check-binary.sh
+          codesign --verify --strict dist/Klemmi.app
 
       - name: Verify signature
         if: steps.signing.outputs.signed == 'true'

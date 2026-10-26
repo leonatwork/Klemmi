@@ -2,7 +2,9 @@
 
 Klemmi ist eine kleine native macOS-App, die einen durchsuchbaren Verlauf der Zwischenablage führt – Text und Bilder, jeweils mit Zeitstempel und der App, aus der der Inhalt kopiert wurde. Ersatz für Tools wie Pasta.
 
-![Plattform](https://img.shields.io/badge/macOS-13%2B-blue) ![Sprache](https://img.shields.io/badge/Swift-AppKit-orange) [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
+![Plattform: Apple Silicon, macOS 13+](https://img.shields.io/badge/macOS-13%2B_Apple_Silicon-blue) ![Sprache](https://img.shields.io/badge/Swift-AppKit-orange) [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-blue.svg)](LICENSE) [![Package: I love macOS, but I miss some Windows features](https://img.shields.io/badge/Package-I_love_macOS%2C_but_I_miss_some_Windows_features-0A84FF)](https://github.com/search?q=topic%3Ai-love-macos-but-i-miss-windows-features+user%3Aleonatwork&type=repositories)
+
+Voraussetzung: **Apple Silicon, macOS 13+**.
 
 *🇬🇧 [English version](README.md) — die englische Fassung ist maßgeblich und wird zuerst aktualisiert.*
 

@@ -16,7 +16,7 @@ cd Klemmi
 
 `build.sh` compiles the sources, copies the localizations, generates the icon and places
 `Klemmi.app` in `dist/` (`--install` also copies it into `/Applications`). Requirements:
-macOS 13 or later.
+Apple Silicon, macOS 13+.
 
 ## Things worth knowing before you change something
 
@@ -64,7 +64,7 @@ the images, and keep the demo entries free of personal data.
 
 ## Reporting bugs
 
-Please include your macOS version, whether you are on Apple Silicon or Intel, and — where
+Please include your macOS version, your Apple Silicon chip model, and — where
 relevant — which app you copied from. Please do **not** paste actual clipboard contents into
 an issue.
 
