@@ -15,12 +15,147 @@ enum HistoryPersistenceTests {
         try missingIndexRetainsImages(root.appendingPathComponent("first-launch"))
         try pendingWrites(root.appendingPathComponent("pending"))
         try clipboardWrites(root.appendingPathComponent("clipboard"))
+        try privateDirectories(root.appendingPathComponent("permissions"))
+        try capturePrivacy(root.appendingPathComponent("privacy"))
     }
 
     static func prepare(_ base: URL) throws -> URL {
         let images = base.appendingPathComponent("Images", isDirectory: true)
         try fm.createDirectory(at: images, withIntermediateDirectories: true)
         return images
+    }
+
+    static func privateDirectories(_ parent: URL) throws {
+        try fm.createDirectory(at: parent, withIntermediateDirectories: true)
+        try fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: parent.path)
+        let base = parent.appendingPathComponent("store", isDirectory: true)
+        let images = base.appendingPathComponent("Images", isDirectory: true)
+        func permissions(_ directory: URL) throws -> Int {
+            let attributes = try fm.attributesOfItem(atPath: directory.path)
+            return (attributes[.posixPermissions] as! NSNumber).intValue
+        }
+        let fresh = HistoryStore(baseDirectory: base)
+        fresh.flushPendingWrites()
+        try expect(permissions(base) == 0o700)
+        try expect(permissions(images) == 0o700)
+        // Existing installations must be repaired, without changing parents or data.
+        try fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: base.path)
+        try fm.setAttributes([.posixPermissions: 0o777], ofItemAtPath: images.path)
+        let preserved = Data("synthetic image bytes".utf8)
+        let file = images.appendingPathComponent("preserved.png")
+        try preserved.write(to: file)
+        let existing = HistoryStore(baseDirectory: base)
+        existing.flushPendingWrites()
+        try expect(permissions(base) == 0o700)
+        try expect(permissions(images) == 0o700)
+        try expect(permissions(parent) == 0o755)
+        try expect(Data(contentsOf: file) == preserved)
+    }
+
+    // A normal argument (not precondition's nonthrowing autoclosure) permits disk reads.
+    static func expect(_ condition: Bool, file: StaticString = #filePath, line: UInt = #line) {
+        precondition(condition, file: file, line: line)
+    }
+
+    static func capturePrivacy(_ base: URL) throws {
+        let defaults = UserDefaults.standard
+        let oldIgnore = defaults.object(forKey: "ignoreConcealed")
+        let oldExcluded = defaults.object(forKey: "excludedAppBundleIDs")
+        let oldLimit = defaults.object(forKey: "maxHistoryItems")
+        defer {
+            if let value = oldIgnore { defaults.set(value, forKey: "ignoreConcealed") }
+            else { defaults.removeObject(forKey: "ignoreConcealed") }
+            if let value = oldExcluded { defaults.set(value, forKey: "excludedAppBundleIDs") }
+            else { defaults.removeObject(forKey: "excludedAppBundleIDs") }
+            if let value = oldLimit { defaults.set(value, forKey: "maxHistoryItems") }
+            else { defaults.removeObject(forKey: "maxHistoryItems") }
+        }
+        defaults.removeObject(forKey: "ignoreConcealed")
+        defaults.removeObject(forKey: "excludedAppBundleIDs")
+        Settings.maxHistoryItems = 200
+        precondition(Settings.ignoreConcealed)
+        precondition(Settings.excludedAppBundleIDs == ["com.apple.keychainaccess", "com.apple.Passwords"])
+        let store = HistoryStore(baseDirectory: base)
+        let pb = NSPasteboard.withUniqueName()
+        defer { pb.releaseGlobally() }
+        var sourceBundleID = "org.example.editor"
+        let monitor = ClipboardMonitor(pasteboard: pb, store: store,
+            sourceApplication: { (name: "Synthetic app", bundleID: sourceBundleID) })
+        precondition(!monitor.isRecordingPaused)
+        func copy(_ text: String, marker: String? = nil, image: Bool = false) {
+            pb.clearContents()
+            pb.setString(text, forType: .string)
+            if image { pb.setData(imageData(), forType: .tiff) }
+            if let marker { pb.setData(Data(), forType: NSPasteboard.PasteboardType(rawValue: marker)) }
+        }
+        func snapshot() throws -> [HistoryItem] {
+            store.flushPendingWrites()
+            let index = base.appendingPathComponent("history.json")
+            return fm.fileExists(atPath: index.path) ? try readItems(base) : []
+        }
+        for app in ["com.apple.keychainaccess", "com.apple.Passwords"] {
+            sourceBundleID = app
+            copy("excluded text \(app)")
+            monitor.poll()
+            copy("excluded image \(app)", image: true)
+            monitor.poll()
+        }
+        try expect(snapshot().isEmpty)
+        sourceBundleID = "org.example.custom"
+        Settings.excludedAppBundleIDs = [sourceBundleID]
+        precondition(defaults.stringArray(forKey: "excludedAppBundleIDs") == [sourceBundleID])
+        copy("custom exclusion")
+        monitor.poll()
+        try expect(snapshot().isEmpty)
+        Settings.excludedAppBundleIDs = []
+        precondition(Settings.excludedAppBundleIDs.isEmpty)
+        copy("allowed after removing exclusion")
+        monitor.poll()
+        try expect(snapshot().count == 1)
+        let markers = ["org.nspasteboard.ConcealedType", "org.nspasteboard.TransientType",
+            "org.nspasteboard.AutoGeneratedType", "com.agilebits.onepassword",
+            "de.petermaurer.TransientPasteboardType", "com.typeit4me.clipping"]
+        for marker in markers {
+            Settings.ignoreConcealed = true
+            copy("filtered \(marker)", marker: marker)
+            monitor.poll()
+            copy("filtered image \(marker)", marker: marker, image: true)
+            monitor.poll()
+        }
+        try expect(snapshot().count == 1)
+        Settings.ignoreConcealed = false
+        for marker in markers {
+            copy("allowed \(marker)", marker: marker)
+            monitor.poll()
+        }
+        let beforePause = try snapshot()
+        precondition(beforePause.count == 7)
+        monitor.setRecordingPaused(true)
+        precondition(monitor.isRecordingPaused)
+        copy("paused text")
+        monitor.poll()
+        copy("paused image", image: true)
+        monitor.stopAndCapturePendingChange()
+        monitor.setRecordingPaused(false)
+        precondition(!monitor.isRecordingPaused)
+        monitor.poll()
+        try expect(snapshot().map(\.id) == beforePause.map(\.id))
+        // Resume must also discard changes made between the last timer tick and the click.
+        monitor.setRecordingPaused(true)
+        copy("paused without timer tick")
+        monitor.setRecordingPaused(false)
+        monitor.poll()
+        try expect(snapshot().map(\.id) == beforePause.map(\.id))
+        // A no-op resume while recording must not swallow a legitimate pending change.
+        copy("after resume")
+        monitor.setRecordingPaused(false)
+        monitor.poll()
+        let resumed = try snapshot()
+        precondition(resumed.count == 8 && resumed[0].text == "after resume")
+        let newMonitor = ClipboardMonitor(pasteboard: pb, store: store)
+        precondition(!newMonitor.isRecordingPaused)
+        let files = try fm.contentsOfDirectory(atPath: base.appendingPathComponent("Images").path)
+        precondition(files.isEmpty) // Rejected images must never reach disk.
     }
 
     static func readItems(_ base: URL) throws -> [HistoryItem] {

@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – Histórico da Área de Transferência";
+"statusItem.tooltip.paused" = "Klemmi – Gravação pausada";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "Abrir Visão Geral…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignorar senhas e conteúdo confidencial";
+"menu.pauseRecording" = "Pausar gravação";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Painel flutuante com %@";

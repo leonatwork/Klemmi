@@ -6,21 +6,28 @@ final class ClipboardMonitor {
     static let shared = ClipboardMonitor()
 
     private static let pngType = NSPasteboard.PasteboardType(rawValue: "public.png")
-    private static let concealedType = NSPasteboard.PasteboardType(rawValue: "org.nspasteboard.ConcealedType")
-    private static let transientType = NSPasteboard.PasteboardType(rawValue: "org.nspasteboard.TransientType")
 
     private var timer: Timer?
     private let pasteboard: NSPasteboard
     private let store: HistoryStore
+    private let sourceApplication: () -> (name: String?, bundleID: String?)
     private var lastChangeCount: Int
+
+    /// Session-only: restarting Klemmi always resumes recording.
+    private(set) var isRecordingPaused = false
 
     /// Wird kurz gesetzt, wenn Klemmi selbst etwas in die Zwischenablage schreibt,
     /// damit dieser Schreibvorgang nicht als neuer Verlaufseintrag erfasst wird.
     var ignoredChangeCount: Int?
 
-    init(pasteboard: NSPasteboard = .general, store: HistoryStore = .shared) {
+    init(pasteboard: NSPasteboard = .general, store: HistoryStore = .shared,
+         sourceApplication: @escaping () -> (name: String?, bundleID: String?) = {
+             let app = NSWorkspace.shared.frontmostApplication
+             return (name: app?.localizedName, bundleID: app?.bundleIdentifier)
+         }) {
         self.pasteboard = pasteboard
         self.store = store
+        self.sourceApplication = sourceApplication
         lastChangeCount = pasteboard.changeCount
     }
 
@@ -37,6 +44,14 @@ final class ClipboardMonitor {
         poll()
     }
 
+    func setRecordingPaused(_ paused: Bool) {
+        guard paused != isRecordingPaused else { return }
+        // Consume the final paused change before resuming, even if the timer hasn't
+        // fired yet. Keep polling during pause so no paused content is replayed.
+        if isRecordingPaused { poll() }
+        isRecordingPaused = paused
+    }
+
     func poll() {
         let pb = pasteboard
         let count = pb.changeCount
@@ -48,20 +63,16 @@ final class ClipboardMonitor {
         guard capture else { return }
 
         let types = pb.types ?? []
-        if Settings.ignoreConcealed,
-           types.contains(Self.concealedType) || types.contains(Self.transientType) {
-            return
-        }
-
-        let app = NSWorkspace.shared.frontmostApplication
-        let sourceName = app?.localizedName
-        let sourceBundle = app?.bundleIdentifier
+        let source = sourceApplication()
+        guard CapturePolicy.shouldSave(types: types.map(\.rawValue), sourceBundleID: source.bundleID,
+                                       excludedAppBundleIDs: Settings.excludedAppBundleIDs,
+                                       isPaused: isRecordingPaused, ignoreConcealed: Settings.ignoreConcealed) else { return }
 
         if types.contains(.tiff) || types.contains(Self.pngType),
             let data = pb.data(forType: Self.pngType) ?? pb.data(forType: .tiff) {
-            store.addImage(data, sourceAppName: sourceName, sourceBundleID: sourceBundle)
+            store.addImage(data, sourceAppName: source.name, sourceBundleID: source.bundleID)
         } else if let text = pb.string(forType: .string), !text.isEmpty {
-            store.addText(text, sourceAppName: sourceName, sourceBundleID: sourceBundle)
+            store.addText(text, sourceAppName: source.name, sourceBundleID: source.bundleID)
         }
     }
 }

@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – 클립보드 기록";
+"statusItem.tooltip.paused" = "Klemmi – 기록 일시 정지됨";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "개요 열기…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "암호 및 민감한 콘텐츠 무시";
+"menu.pauseRecording" = "기록 일시 정지";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@(으)로 오버레이 열기";

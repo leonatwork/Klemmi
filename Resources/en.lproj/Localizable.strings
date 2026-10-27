@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – Clipboard History";
+"statusItem.tooltip.paused" = "Klemmi – Recording Paused";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "Open Overview…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignore Passwords & Sensitive Content";
+"menu.pauseRecording" = "Pause Recording";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay via %@";

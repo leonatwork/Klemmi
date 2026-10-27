@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – Klembordgeschiedenis";
+"statusItem.tooltip.paused" = "Klemmi – Opname gepauzeerd";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "Open overzicht…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Negeer wachtwoorden en gevoelige inhoud";
+"menu.pauseRecording" = "Opname pauzeren";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Zwevend paneel met %@";
