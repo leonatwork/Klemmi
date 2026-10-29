@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – Zwischenablage-Verlauf";
+"statusItem.tooltip.paused" = "Klemmi – Aufzeichnung pausiert";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "Übersicht öffnen …";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Passwörter & sensible Inhalte ignorieren";
+"menu.pauseRecording" = "Aufzeichnung pausieren";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay per %@";

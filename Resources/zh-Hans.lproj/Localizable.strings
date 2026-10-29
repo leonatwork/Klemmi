@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – 剪贴板历史记录";
+"statusItem.tooltip.paused" = "Klemmi – 记录已暂停";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "打开概览…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "忽略密码和敏感内容";
+"menu.pauseRecording" = "暂停记录";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "使用 %@ 打开浮动面板";

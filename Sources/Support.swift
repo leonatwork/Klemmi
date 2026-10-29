@@ -23,6 +23,12 @@ struct Settings {
         get { d.object(forKey: "ignoreConcealed") as? Bool ?? true }
         set { d.set(newValue, forKey: "ignoreConcealed") }
     }
+    /// Quell-App-Heuristik: Standard aktiv, eine explizit leere Liste bleibt leer.
+    /// Die Pflegeoberfläche folgt in einem separaten Paket.
+    static var excludedAppBundleIDs: [String] {
+        get { d.stringArray(forKey: "excludedAppBundleIDs") ?? CapturePolicy.defaultExcludedAppBundleIDs }
+        set { d.set(newValue, forKey: "excludedAppBundleIDs") }
+    }
     /// Globales Kürzel ⌘⇧C für das Overlay registrieren.
     static var overlayHotKeyEnabled: Bool {
         get { d.object(forKey: "overlayHotKeyEnabled") as? Bool ?? true }

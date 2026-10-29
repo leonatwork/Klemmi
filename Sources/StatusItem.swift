@@ -16,9 +16,8 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         statusItem.autosaveName = "KlemmiStatusItem"
         statusItem.behavior = []
         statusItem.isVisible = true
-        statusItem.button?.image = Self.menuBarIcon()
         statusItem.button?.imagePosition = .imageOnly
-        statusItem.button?.toolTip = L10n.tr("statusItem.tooltip")
+        updateRecordingStatus()
         statusItem.button?.target = self
         statusItem.button?.action = #selector(click(_:))
         statusItem.button?.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -76,6 +75,11 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
                                     action: #selector(toggleConcealed), keyEquivalent: "")
         concealed.state = Settings.ignoreConcealed ? .on : .off
         menu.addItem(concealed)
+
+        let pause = NSMenuItem(title: L10n.tr("menu.pauseRecording"),
+                               action: #selector(toggleRecordingPause), keyEquivalent: "")
+        pause.state = ClipboardMonitor.shared.isRecordingPaused ? .on : .off
+        menu.addItem(pause)
 
         let hotKey = NSMenuItem(title: L10n.tr("menu.overlayHotKey", OverlayHotKey.displayString),
                                 action: #selector(toggleHotKey), keyEquivalent: "")
@@ -149,6 +153,20 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
     @objc private func toggleConcealed() { Settings.ignoreConcealed.toggle() }
 
+    @objc private func toggleRecordingPause() {
+        let monitor = ClipboardMonitor.shared
+        monitor.setRecordingPaused(!monitor.isRecordingPaused)
+        updateRecordingStatus()
+    }
+
+    private func updateRecordingStatus() {
+        let paused = ClipboardMonitor.shared.isRecordingPaused
+        statusItem.button?.image = Self.menuBarIcon(paused: paused)
+        let description = paused ? L10n.tr("statusItem.tooltip.paused") : L10n.tr("statusItem.tooltip")
+        statusItem.button?.toolTip = description
+        statusItem.button?.setAccessibilityLabel(description)
+    }
+
     private func updateLoginItem(_ item: NSMenuItem) {
         let state = LoginItemPolicy.menuState(for: SMAppService.mainApp.status)
         item.state = state.checkmark
@@ -193,7 +211,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
     // MARK: Symbol
 
-    private static func menuBarIcon() -> NSImage {
+    private static func menuBarIcon(paused: Bool) -> NSImage {
         let size = NSSize(width: 18, height: 18)
         let image = NSImage(size: size)
         image.lockFocus()
@@ -207,12 +225,19 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         NSBezierPath(roundedRect: NSRect(x: s*0.38, y: s*0.80, width: s*0.24, height: s*0.14), xRadius: 1.5, yRadius: 1.5)
             .fill()
 
-        for y: CGFloat in [0.60, 0.45, 0.30] {
-            let line = NSBezierPath()
-            line.lineWidth = 1.2
-            line.move(to: NSPoint(x: s*0.32, y: s*y))
-            line.line(to: NSPoint(x: s*0.68, y: s*y))
-            line.stroke()
+        if paused {
+            NSColor.black.setFill()
+            for x: CGFloat in [0.35, 0.55] {
+                NSBezierPath(rect: NSRect(x: s*x, y: s*0.28, width: s*0.10, height: s*0.35)).fill()
+            }
+        } else {
+            for y: CGFloat in [0.60, 0.45, 0.30] {
+                let line = NSBezierPath()
+                line.lineWidth = 1.2
+                line.move(to: NSPoint(x: s*0.32, y: s*y))
+                line.line(to: NSPoint(x: s*0.68, y: s*y))
+                line.stroke()
+            }
         }
 
         image.unlockFocus()

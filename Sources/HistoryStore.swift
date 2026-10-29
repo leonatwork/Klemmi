@@ -42,9 +42,16 @@ final class HistoryStore {
         imagesDir = baseDirectory.appendingPathComponent("Images", isDirectory: true)
         indexFile = baseDirectory.appendingPathComponent("history.json")
         do {
-            try fm.createDirectory(at: imagesDir, withIntermediateDirectories: true)
+            // Repair existing installations as well as new ones, before loading data.
+            // Only Klemmi's directories are changed, never Application Support itself.
+            for directory in [baseDirectory, imagesDir] {
+                try fm.createDirectory(at: directory, withIntermediateDirectories: true,
+                                       attributes: [.posixPermissions: 0o700])
+                try fm.setAttributes([.posixPermissions: 0o700], ofItemAtPath: directory.path)
+            }
         } catch {
-            NSLog("Klemmi: cannot create history directory (error %ld)", (error as NSError).code)
+            canSave = false
+            NSLog("Klemmi: cannot secure history directories; saving disabled (error %ld)", (error as NSError).code)
         }
         load()
         items = storedItems

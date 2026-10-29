@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – Cronologia degli Appunti";
+"statusItem.tooltip.paused" = "Klemmi – Registrazione in pausa";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "Apri panoramica…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "Ignora password e contenuti sensibili";
+"menu.pauseRecording" = "Metti in pausa la registrazione";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Pannello flottante con %@";

@@ -2,6 +2,7 @@
 
 /* Tooltip of the menu bar icon */
 "statusItem.tooltip" = "Klemmi – クリップボード履歴";
+"statusItem.tooltip.paused" = "Klemmi – 記録を一時停止中";
 
 /* Right-click menu: opens the overview window */
 "menu.openOverview" = "概要を開く…";
@@ -25,6 +26,7 @@
 
 /* Right-click menu: skip content flagged as concealed by password managers */
 "menu.ignoreConcealed" = "パスワードと機密性の高い内容を無視";
+"menu.pauseRecording" = "記録を一時停止";
 
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@でオーバーレイを表示";
