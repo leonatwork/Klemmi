@@ -66,7 +66,8 @@ final class HistoryStore {
                                sourceAppName: sourceAppName, sourceBundleID: sourceBundleID, date: Date())
         let limit = Settings.maxHistoryItems
         queue.async {
-            if let first = self.storedItems.first, first.kind == .text, first.text == text { return }
+            if let first = self.storedItems.first(where: { !$0.pinned }),
+               first.kind == .text, first.text == text { return }
             self.insert(item, limit: limit)
         }
     }
@@ -99,12 +100,28 @@ final class HistoryStore {
 
     private func insert(_ item: HistoryItem, limit: Int) {
         storedItems.insert(item, at: 0)
-        if storedItems.count > limit {
-            pendingImageRemovals.formUnion(storedItems.suffix(from: limit).compactMap(\.imageFile))
-            storedItems = Array(storedItems.prefix(limit))
-        }
+        trim(limit: limit)
         save()
         publish()
+    }
+
+    private func trim(limit: Int) {
+        let retained = HistoryPinning.trimmed(storedItems, limit: limit)
+        let retainedIDs = Set(retained.map(\.id))
+        pendingImageRemovals.formUnion(storedItems.filter { !retainedIDs.contains($0.id) }.compactMap(\.imageFile))
+        storedItems = retained
+    }
+
+    func togglePinned(_ id: UUID) {
+        precondition(Thread.isMainThread)
+        let limit = Settings.maxHistoryItems
+        queue.async {
+            guard let idx = self.storedItems.firstIndex(where: { $0.id == id }) else { return }
+            self.storedItems[idx].pinned.toggle()
+            self.trim(limit: limit)
+            self.save()
+            self.publish()
+        }
     }
 
     private func publish() {
@@ -131,8 +148,8 @@ final class HistoryStore {
     func clear() {
         precondition(Thread.isMainThread)
         queue.async {
-            self.pendingImageRemovals.formUnion(self.storedItems.compactMap(\.imageFile))
-            self.storedItems = []
+            self.pendingImageRemovals.formUnion(self.storedItems.filter { !$0.pinned }.compactMap(\.imageFile))
+            self.storedItems = HistoryPinning.ordered(self.storedItems.filter(\.pinned))
             self.save()
             self.publish()
         }
@@ -162,7 +179,7 @@ final class HistoryStore {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            storedItems = try decoder.decode([HistoryItem].self, from: data)
+            storedItems = HistoryPinning.ordered(try decoder.decode([HistoryItem].self, from: data))
         } catch {
             loadFailed = true
             do {
