@@ -17,6 +17,8 @@ enum HistoryPersistenceTests {
         try clipboardWrites(root.appendingPathComponent("clipboard"))
         try privateDirectories(root.appendingPathComponent("permissions"))
         try capturePrivacy(root.appendingPathComponent("privacy"))
+        try pinning(root.appendingPathComponent("pinning"))
+        try pinningLimit(root.appendingPathComponent("pinning-limit"))
     }
 
     static func prepare(_ base: URL) throws -> URL {
@@ -162,6 +164,101 @@ enum HistoryPersistenceTests {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         return try decoder.decode([HistoryItem].self, from: Data(contentsOf: base.appendingPathComponent("history.json")))
+    }
+
+    static func pinning(_ base: URL) throws {
+        let images = try prepare(base)
+        let oldLimit = UserDefaults.standard.object(forKey: "maxHistoryItems")
+        defer {
+            if let value = oldLimit { UserDefaults.standard.set(value, forKey: "maxHistoryItems") }
+            else { UserDefaults.standard.removeObject(forKey: "maxHistoryItems") }
+        }
+        Settings.maxHistoryItems = 10
+        let oldest = HistoryItem(id: UUID(), kind: .image, text: nil, imageFile: "pin.png",
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 1))
+        let ordinary = HistoryItem(id: UUID(), kind: .image, text: nil, imageFile: "ordinary.png",
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 2))
+        let recent = HistoryItem(id: UUID(), kind: .text, text: "recent", imageFile: nil,
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 3))
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        try encoder.encode([recent, ordinary, oldest]).write(to: base.appendingPathComponent("history.json"))
+        let pinBytes = Data([1, 2, 3])
+        try pinBytes.write(to: images.appendingPathComponent("pin.png"))
+        try Data([4]).write(to: images.appendingPathComponent("ordinary.png"))
+        let store = HistoryStore(baseDirectory: base)
+        store.togglePinned(oldest.id)
+        store.flushPendingWrites()
+        let pinned = try readItems(base)
+        precondition(pinned.map(\.id) == [oldest.id, recent.id, ordinary.id])
+        precondition(pinned[0].pinned && pinned[0].date == oldest.date)
+        let restarted = HistoryStore(baseDirectory: base)
+        restarted.flushPendingWrites()
+        precondition(restarted.items == pinned)
+
+        store.togglePinned(oldest.id)
+        store.flushPendingWrites()
+        let unpinned = try readItems(base)
+        precondition(unpinned.map(\.id) == [recent.id, ordinary.id, oldest.id])
+        precondition(!unpinned[2].pinned && unpinned[2].date == oldest.date)
+        store.togglePinned(oldest.id)
+        store.clear()
+        store.flushPendingWrites()
+        let cleared = try readItems(base)
+        precondition(cleared.count == 1 && cleared[0].id == oldest.id && cleared[0].pinned)
+        try expect(Data(contentsOf: images.appendingPathComponent("pin.png")) == pinBytes)
+        precondition(!fm.fileExists(atPath: images.appendingPathComponent("ordinary.png").path))
+        // A missing ID must not trigger trimming or save another snapshot.
+        let before = try Data(contentsOf: base.appendingPathComponent("history.json"))
+        store.togglePinned(UUID())
+        store.flushPendingWrites()
+        try expect(Data(contentsOf: base.appendingPathComponent("history.json")) == before)
+        store.delete(oldest.id)
+        store.flushPendingWrites()
+        try expect(readItems(base).isEmpty)
+        try expect(fm.contentsOfDirectory(atPath: images.path).isEmpty)
+    }
+
+    static func pinningLimit(_ base: URL) throws {
+        let images = try prepare(base)
+        let oldLimit = UserDefaults.standard.object(forKey: "maxHistoryItems")
+        defer {
+            if let value = oldLimit { UserDefaults.standard.set(value, forKey: "maxHistoryItems") }
+            else { UserDefaults.standard.removeObject(forKey: "maxHistoryItems") }
+        }
+        Settings.maxHistoryItems = 1
+        let pin = HistoryItem(id: UUID(), kind: .image, text: nil, imageFile: "protected.png",
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 1), pinned: true)
+        let pinText = HistoryItem(id: UUID(), kind: .text, text: "pinned text", imageFile: nil,
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 2), pinned: true)
+        let old = HistoryItem(id: UUID(), kind: .image, text: nil, imageFile: "old.png",
+            sourceAppName: nil, sourceBundleID: nil, date: Date(timeIntervalSince1970: 3))
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        // Unsorted input verifies startup ordering, without trimming during load.
+        try encoder.encode([old, pin, pinText]).write(to: base.appendingPathComponent("history.json"))
+        let protectedBytes = Data([5, 6])
+        try protectedBytes.write(to: images.appendingPathComponent("protected.png"))
+        try Data([7]).write(to: images.appendingPathComponent("old.png"))
+        let store = HistoryStore(baseDirectory: base)
+        precondition(store.items.map(\.id) == [pinText.id, pin.id, old.id])
+        // Recopying a pinned text creates a normal entry, even if the pin is first.
+        store.addText("pinned text", sourceAppName: nil, sourceBundleID: nil)
+        store.flushPendingWrites()
+        let trimmed = try readItems(base)
+        precondition(trimmed.count == 3 && trimmed.prefix(2).map(\.id) == [pinText.id, pin.id])
+        precondition(!trimmed[2].pinned && trimmed[2].text == pinText.text && trimmed[2].id != pinText.id)
+        try expect(Data(contentsOf: images.appendingPathComponent("protected.png")) == protectedBytes)
+        precondition(!fm.fileExists(atPath: images.appendingPathComponent("old.png").path))
+        // Ordinary consecutive duplicate suppression remains intact behind pins.
+        store.addText("pinned text", sourceAppName: nil, sourceBundleID: nil)
+        store.flushPendingWrites()
+        try expect(readItems(base) == trimmed)
+        store.togglePinned(pin.id)
+        store.flushPendingWrites()
+        let afterUnpin = try readItems(base)
+        precondition(afterUnpin.map(\.id) == [pinText.id, trimmed[2].id])
+        precondition(!fm.fileExists(atPath: images.appendingPathComponent("protected.png").path))
     }
 
     static func corruptHistory(_ base: URL) throws {
