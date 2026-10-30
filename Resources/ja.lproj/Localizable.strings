@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@でオーバーレイを表示";
 
+"menu.changeOverlayHotKey" = "ショートカットを変更…";
+"menu.overlayHotKey.registrationFailed" = "%@ — 登録に失敗";
+"hotKey.recorder.title" = "オーバーレイのショートカットを変更";
+"hotKey.recorder.message" = "⌘、⌃、⌥のいずれかを含むショートカットを押してください。Escでキャンセル、⌫でデフォルト（%@）に戻します。";
+"hotKey.recorder.invalid" = "⌘、⌃、⌥のいずれかが必要です。別のショートカットを試してください。";
+"hotKey.error.title" = "ショートカットを登録できませんでした";
+"hotKey.error.message" = "Klemmiはショートカットを登録できませんでした。以前有効だったショートカットは引き続き有効で、保存済みのショートカットは変更されません。別のアプリが同じグローバルショートカットを使用している可能性があります。別のショートカットを選ぶか、後でもう一度試してください。";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "直接ペースト";
 "menu.directPaste.requiresApproval" = "直接ペースト — システム設定で許可…";

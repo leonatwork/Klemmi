@@ -35,16 +35,16 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
 
 ## Funktionen
 
-- **Globales Kürzel ⌘⇧C**: öffnet ein schwebendes Overlay mit dem Verlauf auf dem Bildschirm, auf dem die Maus ist – ohne der App, in der man gerade arbeitet, den Fokus zu nehmen. Tippen filtert, ↑/↓ wählt, ↩ legt den Eintrag in die Zwischenablage und schließt das Overlay, esc schließt. Braucht keine Bedienungshilfen-Berechtigung; im Rechtsklick-Menü abschaltbar.
+- **Frei belegbares globales Kürzel, Standard ⌃⌥⌘V**: öffnet ein schwebendes Overlay mit dem Verlauf auf dem Bildschirm, auf dem die Maus ist – ohne der App, in der man gerade arbeitet, den Fokus zu nehmen. Tippen filtert, ↑/↓ wählt, ↩ legt den Eintrag in die Zwischenablage und schließt das Overlay, esc schließt. Braucht keine Bedienungshilfen-Berechtigung. Über **Kürzel ändern…** im Rechtsklick-Menü nimmst du ein Kürzel mit mindestens ⌘, ⌃ oder ⌥ auf; Esc bricht ab, ⌫ setzt auf den Standard zurück. Das Kürzel bleibt nach Neustarts sowie beim Aus- und Einschalten erhalten. Das Menü zeigt die Taste aus der aktuellen Tastaturbelegung und setzt das Häkchen nur bei aktiver Registrierung. Schlägt die Registrierung eines neuen Kürzels fehl, erscheint eine Fehlermeldung und das bisherige bleibt aktiv. Registrierungsfehler beim Start sind im Menü markiert. Der neue Standard gilt für alle ohne gespeichertes Kürzel.
 
   <div align="center">
-    <img src="docs/screenshots/overlay.de.png" alt="Klemmi-Overlay, geöffnet per Befehl-Umschalt-C" width="516" />
+    <img src="docs/screenshots/overlay.de.png" alt="Klemmi-Overlay, geöffnet per globalem Kürzel" width="516" />
     <br />
-    <em>Das Overlay per ⌘⇧C — der neueste Eintrag ist vorausgewählt, ↩ kopiert ihn</em>
+    <em>Das Overlay — der neueste Eintrag ist vorausgewählt, ↩ kopiert ihn</em>
   </div>
 
 - **Direkt einfügen** (optional, standardmäßig aus): Ist **Direkt einfügen** im Rechtsklick-Menü eingeschaltet, sendet ↩ im Overlay zusätzlich ⌘V an die App, in der man gerade gearbeitet hat – wie bei Win+V. ⌥↩ macht für diesen einen Eintrag das Gegenteil der Einstellung; Mausklicks kopieren immer nur. Das ist die einzige Funktion, die die Berechtigung für **Bedienungshilfen** braucht: Klemmi erklärt vorher, warum, bevor macOS fragt, und der Hinweis im Overlay zeigt, ob ↩ einfügt oder kopiert. Fehlt das Recht oder wird es entzogen, kopiert ↩ wieder nur, und der Menüpunkt verweist auf die Systemeinstellungen. Die Taste „V“ wird in der aktiven Tastaturbelegung gesucht, funktioniert also auch mit Dvorak und anderen Belegungen.
-- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten, Direkt einfügen, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
+- **Menüleisten-Symbol**: Klick öffnet ein kompaktes Popover mit dem Verlauf, Rechtsklick ein Menü (Übersicht öffnen, Dock-Symbol ein-/ausblenden, sensible Inhalte ignorieren, Kürzel ein-/ausschalten oder ändern, Direkt einfügen, Verlauf leeren, weitere Apps aus dem Paket, Beenden).
 - **Bei Anmeldung starten**: Klemmi meldet sich beim ersten Start einmalig selbst an,
   auch beim ersten Start nach dem Update auf diese Funktion. Danach steuert **Bei Anmeldung
   starten** im Rechtsklick-Menü die Anmeldung; nach dem Abschalten oder einem fehlgeschlagenen
@@ -64,7 +64,6 @@ Vermisst du auf dem Mac mehr als eine dieser Funktionen? Lade gleich alle vier h
 
 - Die Quell-App wird über die zum Zeitpunkt des Kopierens vorderste App ermittelt (macOS liefert keine direkte Quellangabe über die Zwischenablage) – in der Regel zuverlässig, aber kein Systemgarantie.
 - Automatisches Einfügen gibt es nur per ↩ im Overlay und nur mit Bedienungshilfen-Berechtigung. Aus dem Popover und dem Übersichtsfenster landet ein Eintrag nur in der Zwischenablage, eingefügt wird klassisch per ⌘V.
-- Das Overlay-Kürzel ist fest auf ⌘⇧C eingestellt und noch nicht änderbar.
 
 ## Installation
 
@@ -107,7 +106,9 @@ Das Skript kompiliert die Quellen, kopiert die Übersetzungen, erzeugt das App-S
 | `Sources/main.swift` | App-Delegate, Einstiegspunkt |
 | `Sources/StatusItem.swift` | Menüleisten-Symbol, Popover, Kontextmenü |
 | `Sources/Overlay.swift` | Schwebendes Overlay, geöffnet per globalem Kürzel |
-| `Sources/HotKey.swift` | Globales Kürzel ⌘⇧C über die Carbon-Hotkey-API |
+| `Sources/HotKey.swift` | Frei belegbares globales Kürzel über Carbon; Anzeige aus der Tastaturbelegung |
+| `Sources/HotKeyPolicy.swift` | Validierung, Speicherung, Anzeige und transaktionale Registrierungsentscheidungen |
+| `Sources/HotKeyRecorder.swift` | Modaler Recorder aus dem Rechtsklick-Menü |
 | `Sources/DirectPastePolicy.swift` | Reine Entscheidungen für „Direkt einfügen“ (Einstellung, Recht, ⌥, Tastatur/Maus) |
 | `Sources/DirectPaste.swift` | Bedienungshilfen-Recht, Erklärdialog, sendet ⌘V per CGEvent |
 | `Sources/HistoryList.swift` | Tabellenansicht des Verlaufs samt Suche (Popover) |

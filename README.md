@@ -38,16 +38,22 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 
 ## Features
 
-- **Global shortcut** <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd>: opens a floating overlay with
+- **Configurable global shortcut**, default <kbd>⌃</kbd><kbd>⌥</kbd><kbd>⌘</kbd><kbd>V</kbd>: opens a floating overlay with
   the history on the screen the mouse is on, without taking focus away from the app you are
   working in. Type to filter, <kbd>↑</kbd>/<kbd>↓</kbd> to move, <kbd>↩</kbd> puts the entry
   on the clipboard and closes the overlay, <kbd>esc</kbd> closes it. Needs no Accessibility
-  permission; can be switched off in the right-click menu.
+  permission. Use **Change Shortcut…** in the right-click menu to record a shortcut with
+  at least <kbd>⌘</kbd>, <kbd>⌃</kbd> or <kbd>⌥</kbd>; <kbd>esc</kbd> cancels and
+  <kbd>⌫</kbd> restores the default. The shortcut survives restarts and can be switched
+  off and on without changing it. The menu uses the current keyboard layout and checks
+  the shortcut only when registration is active. If a new shortcut cannot be registered,
+  an error appears and the previous shortcut stays active. Startup registration failures
+  are marked in the menu. The new default applies to everyone without a saved shortcut.
 
   <div align="center">
-    <img src="docs/screenshots/overlay.png" alt="Klemmi overlay opened with Command-Shift-C" width="516" />
+    <img src="docs/screenshots/overlay.png" alt="Klemmi overlay opened with the global shortcut" width="516" />
     <br />
-    <em>The <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> overlay — the newest entry is preselected, <kbd>↩</kbd> copies it</em>
+    <em>The overlay — the newest entry is preselected, <kbd>↩</kbd> copies it</em>
   </div>
 
 - **Paste directly** (optional, off by default): with **Paste Directly** enabled in the
@@ -61,7 +67,7 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
   works with Dvorak and other layouts too.
 - **Menu bar icon**: a click opens a compact popover with the history, a right-click opens
   a menu (open overview, show/hide the Dock icon, ignore sensitive content, toggle the
-  shortcut, paste directly, clear history, more apps from the package, quit).
+  shortcut or change it, paste directly, clear history, more apps from the package, quit).
 - **Start at login**: Klemmi registers once on first launch, including the first launch
   after updating to this feature. After that, use **Start at Login** in the right-click
   menu; disabling it or a failed first attempt will not trigger automatic re-registration.
@@ -95,8 +101,6 @@ Miss more than one of these on your Mac? Grab all four — they are small and wo
 - Automatic pasting is limited to <kbd>↩</kbd> in the overlay and needs the Accessibility
   permission. From the popover and the overview window an entry is only placed on the
   clipboard; pasting stays <kbd>⌘</kbd><kbd>V</kbd>.
-- The overlay shortcut is fixed to <kbd>⌘</kbd><kbd>⇧</kbd><kbd>C</kbd> and cannot be
-  changed yet.
 
 ## Installation
 
@@ -149,7 +153,9 @@ would rather it did not persist.
 | `Sources/main.swift` | App delegate, entry point |
 | `Sources/StatusItem.swift` | Menu bar icon, popover, context menu |
 | `Sources/Overlay.swift` | Floating overlay opened by the global shortcut |
-| `Sources/HotKey.swift` | Global shortcut ⌘⇧C via the Carbon hotkey API |
+| `Sources/HotKey.swift` | Configurable global shortcut via Carbon; keyboard-layout labels |
+| `Sources/HotKeyPolicy.swift` | Shortcut validation, persistence, display and transactional registration decisions |
+| `Sources/HotKeyRecorder.swift` | Modal shortcut recorder from the right-click menu |
 | `Sources/DirectPastePolicy.swift` | Pure decisions for Paste Directly (setting, permission, ⌥, keyboard/mouse) |
 | `Sources/DirectPaste.swift` | Accessibility permission, explanation dialog, sends ⌘V via CGEvent |
 | `Sources/HistoryList.swift` | Table view of the history including search (popover) |

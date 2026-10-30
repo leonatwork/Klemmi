@@ -29,10 +29,14 @@ struct Settings {
         get { d.stringArray(forKey: "excludedAppBundleIDs") ?? CapturePolicy.defaultExcludedAppBundleIDs }
         set { d.set(newValue, forKey: "excludedAppBundleIDs") }
     }
-    /// Globales Kürzel ⌘⇧C für das Overlay registrieren.
+    /// Globales Overlay-Kürzel registrieren; ohne gespeicherten Wert gilt ⌃⌥⌘V.
     static var overlayHotKeyEnabled: Bool {
         get { d.object(forKey: "overlayHotKeyEnabled") as? Bool ?? true }
         set { d.set(newValue, forKey: "overlayHotKeyEnabled") }
+    }
+    static var overlayHotKey: HotKeyShortcut {
+        get { HotKeyShortcut.load(from: d) }
+        set { newValue.save(to: d) }
     }
     /// ↩ im Overlay sendet zusätzlich ⌘V an die zuvor aktive App (braucht Bedienungshilfen).
     /// Standard aus: Ohne die Einstellung fragt Klemmi keine Berechtigung ab.

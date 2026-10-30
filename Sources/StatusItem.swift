@@ -81,10 +81,15 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
         pause.state = ClipboardMonitor.shared.isRecordingPaused ? .on : .off
         menu.addItem(pause)
 
-        let hotKey = NSMenuItem(title: L10n.tr("menu.overlayHotKey", OverlayHotKey.displayString),
-                                action: #selector(toggleHotKey), keyEquivalent: "")
-        hotKey.state = Settings.overlayHotKeyEnabled ? .on : .off
+        var hotKeyTitle = L10n.tr("menu.overlayHotKey", OverlayHotKey.displayString)
+        if OverlayHotKey.shared.isUnavailable {
+            hotKeyTitle = L10n.tr("menu.overlayHotKey.registrationFailed", hotKeyTitle)
+        }
+        let hotKey = NSMenuItem(title: hotKeyTitle,
+                                 action: #selector(toggleHotKey), keyEquivalent: "")
+        hotKey.state = OverlayHotKey.shared.isActive ? .on : .off
         menu.addItem(hotKey)
+        menu.addItem(withTitle: L10n.tr("menu.changeOverlayHotKey"), action: #selector(changeHotKey), keyEquivalent: "")
 
         let directPaste = NSMenuItem(title: "", action: #selector(toggleDirectPaste(_:)), keyEquivalent: "")
         updateDirectPaste(directPaste)
@@ -184,7 +189,18 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
     @objc private func toggleHotKey() {
         Settings.overlayHotKeyEnabled.toggle()
-        OverlayHotKey.shared.apply()
+        if !OverlayHotKey.shared.apply() {
+            if OverlayHotKey.shared.isActive { Settings.overlayHotKeyEnabled = true }
+            OverlayHotKey.shared.showRegistrationError()
+        }
+    }
+
+    @objc private func changeHotKey() {
+        popover.performClose(nil)
+        guard let shortcut = HotKeyRecorder.record() else { return }
+        if !OverlayHotKey.shared.change(to: shortcut) {
+            OverlayHotKey.shared.showRegistrationError()
+        }
     }
 
     /// Das Recht bei jedem Menüaufbau frisch lesen: Ein Entzug in den Systemeinstellungen
