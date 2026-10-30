@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "%@(으)로 오버레이 열기";
 
+"menu.changeOverlayHotKey" = "단축키 변경…";
+"menu.overlayHotKey.registrationFailed" = "%@ — 등록 실패";
+"hotKey.recorder.title" = "오버레이 단축키 변경";
+"hotKey.recorder.message" = "⌘, ⌃ 또는 ⌥가 포함된 단축키를 누르세요. Esc는 취소하고 ⌫는 기본값(%@)으로 재설정합니다.";
+"hotKey.recorder.invalid" = "⌘, ⌃ 또는 ⌥ 중 하나 이상을 포함해야 합니다. 다른 단축키를 시도하세요.";
+"hotKey.error.title" = "단축키를 등록할 수 없음";
+"hotKey.error.message" = "Klemmi가 단축키를 등록하지 못했습니다. 이전에 활성화된 단축키는 계속 활성 상태이며 저장된 단축키는 변경되지 않습니다. 다른 앱이 이미 이 단축키를 전역으로 사용하고 있을 수 있습니다. 다른 단축키를 선택하거나 나중에 다시 시도하세요.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "바로 붙여넣기";
 "menu.directPaste.requiresApproval" = "바로 붙여넣기 — 시스템 설정에서 허용…";

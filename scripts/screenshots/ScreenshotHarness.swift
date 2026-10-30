@@ -116,7 +116,7 @@ enum ScreenshotHarness {
         }
     }
 
-    /// The ⌘⇧C overlay panel with the first entry preselected, as right after opening it
+    /// The overlay panel with the first entry preselected, as right after opening it
     /// (focus stays in the search field, so the selection is not emphasised).
     static func renderOverlay() -> CGImage {
         let overlay = OverlayController()

@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Zwevend paneel met %@";
 
+"menu.changeOverlayHotKey" = "Wijzig toetscombinatie…";
+"menu.overlayHotKey.registrationFailed" = "%@ — Registratie mislukt";
+"hotKey.recorder.title" = "Wijzig toetscombinatie voor zwevend paneel";
+"hotKey.recorder.message" = "Druk op een toetscombinatie met ⌘, ⌃ of ⌥. Esc annuleert; ⌫ herstelt de standaard (%@).";
+"hotKey.recorder.invalid" = "Gebruik ten minste ⌘, ⌃ of ⌥. Probeer een andere toetscombinatie.";
+"hotKey.error.title" = "Toetscombinatie kon niet worden geregistreerd";
+"hotKey.error.message" = "Klemmi kon de toetscombinatie niet registreren. Een eerder actieve toetscombinatie blijft actief en de bewaarde toetscombinatie blijft ongewijzigd. Een andere app gebruikt deze mogelijk al globaal. Kies een andere toetscombinatie of probeer het later opnieuw.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "Direct plakken";
 "menu.directPaste.requiresApproval" = "Direct plakken — Sta toe in Systeeminstellingen…";

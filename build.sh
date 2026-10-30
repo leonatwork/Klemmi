@@ -15,9 +15,9 @@ swiftc Sources/HistorySafety.swift Tests/HistorySafetyTests.swift -o "$TEST_DIR/
 swiftc Sources/Localization.swift Sources/HistoryItem.swift Sources/HistoryPinning.swift \
   Tests/HistoryPinningTests.swift -o "$TEST_DIR/HistoryPinningTests"
 "$TEST_DIR/HistoryPinningTests"
-swiftc Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift \
+swiftc Sources/Support.swift Sources/HotKeyPolicy.swift Sources/Localization.swift Sources/HistoryItem.swift \
   Sources/HistorySafety.swift Sources/HistoryPinning.swift Sources/HistoryStore.swift Sources/CapturePolicy.swift Sources/ClipboardMonitor.swift Sources/Clipboard.swift \
-  Tests/HistoryPersistenceTests.swift -framework AppKit -o "$TEST_DIR/HistoryPersistenceTests"
+  Tests/HistoryPersistenceTests.swift -framework AppKit -framework Carbon -o "$TEST_DIR/HistoryPersistenceTests"
 "$TEST_DIR/HistoryPersistenceTests"
 
 echo "==> testing login item decisions"
@@ -32,6 +32,12 @@ swiftc -target "$(uname -m)-apple-macosx13.0" \
   -framework AppKit -o "$TEST_DIR/DirectPasteTests"
 "$TEST_DIR/DirectPasteTests"
 
+echo "==> testing overlay shortcut decisions and registration"
+swiftc -target "$(uname -m)-apple-macosx13.0" \
+  Sources/HotKeyPolicy.swift Tests/HotKeyTests.swift \
+  -framework AppKit -framework Carbon -o "$TEST_DIR/HotKeyTests"
+"$TEST_DIR/HotKeyTests"
+
 echo "==> compiling"
 BIN=$(mktemp "${TMPDIR:-/tmp}/klemmi-build.XXXXXX")
 trap 'rm -f "$BIN"' EXIT
@@ -41,7 +47,7 @@ swiftc -O -target arm64-apple-macos13 \
   Sources/LoginItemPolicy.swift Sources/LoginItem.swift \
   Sources/DirectPastePolicy.swift Sources/DirectPaste.swift \
   Sources/ClipboardMonitor.swift Sources/Clipboard.swift Sources/HistoryList.swift \
-  Sources/MainWindow.swift Sources/MainMenu.swift Sources/StatusItem.swift Sources/HotKey.swift \
+  Sources/MainWindow.swift Sources/MainMenu.swift Sources/StatusItem.swift Sources/HotKeyPolicy.swift Sources/HotKey.swift Sources/HotKeyRecorder.swift \
   Sources/OverlayPositioning.swift Sources/Overlay.swift Sources/main.swift \
   -framework AppKit -framework Carbon -framework ServiceManagement \
   -o "$BIN"

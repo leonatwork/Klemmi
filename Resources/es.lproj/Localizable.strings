@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Panel flotante con %@";
 
+"menu.changeOverlayHotKey" = "Cambiar atajo…";
+"menu.overlayHotKey.registrationFailed" = "%@ — Error de registro";
+"hotKey.recorder.title" = "Cambiar atajo del panel flotante";
+"hotKey.recorder.message" = "Pulsa un atajo con ⌘, ⌃ u ⌥. Esc cancela; ⌫ restaura el predeterminado (%@).";
+"hotKey.recorder.invalid" = "Incluye al menos ⌘, ⌃ u ⌥. Prueba otro atajo.";
+"hotKey.error.title" = "No se pudo registrar el atajo";
+"hotKey.error.message" = "Klemmi no pudo registrar el atajo. El atajo que estuviera activo sigue activo y el atajo guardado no cambia. Puede que otra app ya use este atajo globalmente. Elige otro atajo o inténtalo de nuevo más tarde.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "Pegar directamente";
 "menu.directPaste.requiresApproval" = "Pegar directamente — Permitir en Ajustes del Sistema…";
