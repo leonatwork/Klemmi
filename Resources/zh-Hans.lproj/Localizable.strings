@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "使用 %@ 打开浮动面板";
 
+"menu.changeOverlayHotKey" = "更改快捷键…";
+"menu.overlayHotKey.registrationFailed" = "%@ — 注册失败";
+"hotKey.recorder.title" = "更改浮动面板快捷键";
+"hotKey.recorder.message" = "请按下包含 ⌘、⌃ 或 ⌥ 的快捷键。Esc 取消；⌫ 恢复默认快捷键（%@）。";
+"hotKey.recorder.invalid" = "必须包含 ⌘、⌃ 或 ⌥ 中的至少一个。请尝试其他快捷键。";
+"hotKey.error.title" = "无法注册快捷键";
+"hotKey.error.message" = "Klemmi 无法注册快捷键。此前已启用的快捷键仍然有效，已保存的快捷键保持不变。其他 App 可能已将此快捷键注册为全局快捷键。请选择其他快捷键，或稍后重试。";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "直接粘贴";
 "menu.directPaste.requiresApproval" = "直接粘贴 — 在系统设置中允许…";

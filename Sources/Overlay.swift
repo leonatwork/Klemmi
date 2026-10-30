@@ -22,7 +22,7 @@ private final class OverlayPanel: NSPanel {
     override func cancelOperation(_ sender: Any?) { onEscape?() }
 }
 
-/// Schwebendes Overlay mit dem Verlauf, geöffnet per ⌘⇧C (das Win+V-Pendant).
+/// Schwebendes Overlay mit dem Verlauf, geöffnet per globalem Kürzel (das Win+V-Pendant).
 /// Die zuvor aktive App behält den Fokus: Eintrag wählen, Overlay schließt sich,
 /// ⌘V fügt direkt dort ein, wo man gerade war – auf Wunsch („Direkt einfügen“,
 /// braucht Bedienungshilfen) sendet Klemmi das ⌘V nach ↩ selbst.

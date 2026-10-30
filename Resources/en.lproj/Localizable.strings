@@ -31,6 +31,15 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay via %@";
 
+/* Shortcut recorder and registration errors; %@ is the menu title or default shortcut. */
+"menu.changeOverlayHotKey" = "Change Shortcut…";
+"menu.overlayHotKey.registrationFailed" = "%@ — Registration Failed";
+"hotKey.recorder.title" = "Change Overlay Shortcut";
+"hotKey.recorder.message" = "Press a shortcut with ⌘, ⌃ or ⌥. Esc cancels; ⌫ restores the default (%@).";
+"hotKey.recorder.invalid" = "Include at least ⌘, ⌃ or ⌥. Try another shortcut.";
+"hotKey.error.title" = "Couldn’t Register Shortcut";
+"hotKey.error.message" = "Klemmi couldn’t register the shortcut. Any previously active shortcut stays active, and your saved shortcut is unchanged. Another app may already use this shortcut globally. Choose a different shortcut or try again later.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "Paste Directly";
 "menu.directPaste.requiresApproval" = "Paste Directly — Allow in System Settings…";

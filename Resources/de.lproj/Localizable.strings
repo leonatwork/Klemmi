@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Overlay per %@";
 
+"menu.changeOverlayHotKey" = "Kürzel ändern…";
+"menu.overlayHotKey.registrationFailed" = "%@ — Registrierung fehlgeschlagen";
+"hotKey.recorder.title" = "Overlay-Kürzel ändern";
+"hotKey.recorder.message" = "Drücke ein Kürzel mit ⌘, ⌃ oder ⌥. Esc bricht ab; ⌫ setzt auf den Standard (%@) zurück.";
+"hotKey.recorder.invalid" = "Mindestens ⌘, ⌃ oder ⌥ ist erforderlich. Probiere ein anderes Kürzel.";
+"hotKey.error.title" = "Kürzel konnte nicht registriert werden";
+"hotKey.error.message" = "Klemmi konnte das Kürzel nicht registrieren. Ein zuvor aktives Kürzel bleibt aktiv, und dein gespeichertes Kürzel bleibt unverändert. Eine andere App verwendet dieses Kürzel möglicherweise bereits global. Wähle ein anderes Kürzel oder versuche es später erneut.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "Direkt einfügen";
 "menu.directPaste.requiresApproval" = "Direkt einfügen – In Systemeinstellungen erlauben …";

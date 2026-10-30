@@ -31,6 +31,14 @@
 /* Right-click menu: toggle the global shortcut; %@ is the shortcut, e.g. ⌘⇧C */
 "menu.overlayHotKey" = "Panneau flottant avec %@";
 
+"menu.changeOverlayHotKey" = "Modifier le raccourci…";
+"menu.overlayHotKey.registrationFailed" = "%@ — Échec de l’enregistrement";
+"hotKey.recorder.title" = "Modifier le raccourci du panneau flottant";
+"hotKey.recorder.message" = "Appuyez sur un raccourci contenant ⌘, ⌃ ou ⌥. Esc annule ; ⌫ rétablit le raccourci par défaut (%@).";
+"hotKey.recorder.invalid" = "Incluez au moins ⌘, ⌃ ou ⌥. Essayez un autre raccourci.";
+"hotKey.error.title" = "Impossible d’enregistrer le raccourci";
+"hotKey.error.message" = "Klemmi n’a pas pu enregistrer le raccourci. Tout raccourci précédemment actif reste actif et votre raccourci sauvegardé reste inchangé. Une autre app utilise peut-être déjà ce raccourci globalement. Choisissez un autre raccourci ou réessayez plus tard.";
+
 /* Right-click menu: ↩ in the overlay also sends ⌘V (needs Accessibility); normal title, then title while the permission is missing */
 "menu.directPaste" = "Coller directement";
 "menu.directPaste.requiresApproval" = "Coller directement — Autoriser dans Réglages Système…";
