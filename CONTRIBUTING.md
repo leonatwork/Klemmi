@@ -18,6 +18,12 @@ cd Klemmi
 `Klemmi.app` in `dist/` (`--install` also copies it into `/Applications`). Requirements:
 Apple Silicon, macOS 13+.
 
+Optional: `./setup-signing.sh` creates a self-signed local identity so that granted
+permissions survive rebuilds. Its default name is now `Klemmi Local Signing` (formerly
+`Tappi Local Signing`). `build.sh` looks for `Klemmi Local Signing`, then
+`leonatwork Code Signing`, and only then the legacy `Tappi Local Signing`, so an existing
+setup keeps working without re-running the script.
+
 ## Things worth knowing before you change something
 
 - **The clipboard has no change notification.** macOS offers no callback when the pasteboard
