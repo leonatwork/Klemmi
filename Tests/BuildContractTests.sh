@@ -7,10 +7,18 @@ TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 
-mkdir -p "$TMP/bin" "$TMP/project/Resources/en.lproj" "$TMP/temp output"
+mkdir -p "$TMP/bin" "$TMP/project/Resources/en.lproj" "$TMP/project/Tests" "$TMP/temp output"
 cp "$ROOT/build.sh" "$TMP/project/build.sh"
+cp "$ROOT"/Tests/*.swift "$TMP/project/Tests/"
 export PATH="$TMP/bin:$PATH" TMPDIR="$TMP/temp output"
 export ARGUMENTS="$TMP/arguments" OUTPUT="$TMP/output" CODESIGN_IDENTITY=- VERSION=
+export TEST_COMPILE_STATUS=0
+
+assert_temp_empty() (
+  shopt -s nullglob dotglob
+  leftovers=("$TMPDIR"/*)
+  (( ${#leftovers[@]} == 0 )) || fail "temporary files leaked $*: ${leftovers[*]}"
+)
 
 cat > "$TMP/bin/swiftc" <<'STUB'
 #!/usr/bin/env bash
@@ -18,8 +26,9 @@ set -euo pipefail
 printf '%s\n' "$@" > "$ARGUMENTS"
 while (( $# )); do
   if [[ "$1" == -o ]]; then
-    # Test executables built by build.sh's pre-flight step: runnable no-op, always succeeds.
+    # Test executables built by build.sh's pre-flight step: runnable no-op.
     if [[ "$(basename "$2")" == *Tests ]]; then
+      if [[ "$TEST_COMPILE_STATUS" != 0 ]]; then exit "$TEST_COMPILE_STATUS"; fi
       printf '#!/bin/sh\nexit 0\n' > "$2"
       chmod +x "$2"
       exit 0
@@ -65,6 +74,7 @@ for existing in no yes; do
     diff -r "$TMP/previous.app" "$APP" || fail 'failed compilation changed existing bundle'
   fi
   [[ ! -e "$(cat "$OUTPUT")" ]] || fail 'temporary compiler output leaked on failure'
+  assert_temp_empty "after app compiler failure (existing bundle: $existing)"
 done
 
 export COMPILE_STATUS=0
@@ -76,6 +86,21 @@ target=$(awk 'previous == "-target" { print } { previous = $0 }' "$ARGUMENTS")
 [[ "$target" == arm64-apple-macos13 ]] || fail "incorrect compiler target: $target"
 [[ "$(cat "$OUTPUT")" != dist/Klemmi.app/* ]] || fail 'compiler wrote directly into bundle'
 [[ ! -e "$(cat "$OUTPUT")" ]] || fail 'temporary compiler output leaked on success'
+assert_temp_empty 'after successful build'
+
+# Cleanup must also work before BIN has been allocated.
+export TEST_COMPILE_STATUS=43
+status=0
+bash "$TMP/project/build.sh" > "$TMP/build.log" 2>&1 || status=$?
+[[ "$status" == 43 ]] || fail "test compiler failure was not propagated ($status)"
+assert_temp_empty 'after test compiler failure'
+export TEST_COMPILE_STATUS=0
+
+# Keep new Swift tests from silently missing the shared Build/Release test run.
+for test in "$ROOT"/Tests/*.swift; do
+  relative="Tests/$(basename "$test")"
+  grep -F -- "$relative" "$ROOT/build.sh" >/dev/null || fail "test not referenced in build.sh: $relative"
+done
 
 # Exercise the same binary inspector used by both workflows, including tool failures
 # that still print plausible output. No Apple command-line tools are used here.

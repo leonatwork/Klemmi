@@ -1,3 +1,76 @@
+# Issue #32 — implementation handover
+
+Issue: https://github.com/leonatwork/Klemmi/issues/32
+
+## Basis and review
+
+The checkout is at `1bc9a86caccd8e58f796762e23404b6e5ae52d0c`, matching local
+`origin/master`; `origin/HEAD` also points to `origin/master`. This is the default
+branch base authorized by the review findings (named `master`, not `main`).
+No foreign PR branch was used. The only pre-existing working-tree change was the
+Issue #32 blocker report above the older Issue #9 handover; this report replaces it.
+
+Read `CONTRIBUTING.md`, the affected build/test scripts, both workflows and the two
+omitted Swift tests. No `CLAUDE.md` or `AGENTS.md` was found in the repository.
+GitHub issue/comment and open-PR queries were denied by tool permissions. Comments,
+later decisions and live PR status remain unverified; the supplied issue and review
+findings define the binding scope. The implementation uses only the current base
+and has no code dependency on an open PR.
+
+## Acceptance review
+
+| Criterion | Implementation and evidence |
+| --- | --- |
+| AC-1 | `build.sh` installs exactly one `trap cleanup EXIT`, before allocating temporary paths. Cleanup removes `TEST_DIR` and `BIN`, including failures before `BIN` exists. Contract regressions check the entire isolated `TMPDIR` (including hidden entries) after success, app compiler failure with/without an existing bundle, and early test compiler failure. Runtime red/green evidence is pending on macOS. |
+| AC-2 | All nine `Tests/*.swift` files are included in the shared `build.sh` compile/run sequence. MainMenuTests uses the former workflow's source/framework arguments. OverlayPositionTests is copied unchanged to temporary `main.swift` because its top-level calls require that filename in a multi-file Swift build. The separate MainMenu workflow step is removed. Real Swift execution is pending on macOS. |
+| AC-3 | Release now runs `scripts/check-localizations.sh` before the contract suite and `./build.sh`, matching Build's validation order. Both workflow YAML files parse successfully. |
+| AC-4 | The contract suite loops over `Tests/*.swift` and fails with the missing path if `build.sh` does not reference it. Runtime verification is pending on macOS. |
+| AC-5 | Diff review confirms packaging, signing and publishing are unchanged. The required green macOS contract/build runs remain pending. |
+
+## Checks performed
+
+- Added the contract regressions before changing `build.sh` or either workflow.
+- Passed syntax-only checks: `bash -n Tests/BuildContractTests.sh` (also before
+  the fix), `bash -n build.sh`, `bash -n scripts/check-localizations.sh`.
+- Parsed both workflow files with the already available Python `yaml.safe_load`.
+- Passed `git diff --check`; reviewed the changes against AC-1 through AC-5.
+- Per the Linux-server rule, no build, test suite or localization checker was run.
+  No observed red/green or macOS result is claimed. Static inspection predicts
+  the original build will fail the new empty-TMPDIR assertion after the first app
+  compiler failure: the second EXIT trap leaves the test directory behind.
+
+## macOS evidence to collect (Leon)
+
+Run the new contract suite against the original build in an isolated fixture to
+record the expected cleanup regression, without checking out another branch:
+
+```bash
+baseline=$(mktemp -d)
+git archive 1bc9a86 build.sh Tests scripts/check-binary.sh | tar -x -C "$baseline"
+bash Tests/BuildContractTests.sh "$baseline"
+# Expected nonzero: "temporary files leaked after app compiler failure ..."
+rm -rf "$baseline"
+```
+
+Then run the fixed version:
+
+```bash
+bash Tests/BuildContractTests.sh
+scripts/check-localizations.sh
+./build.sh
+```
+
+For AC-4's negative check, copy the fixed `build.sh`, `Tests/` and `scripts/` into
+another temporary fixture, add an empty `Tests/UnreferencedTests.swift` there, and
+pass the fixture path to the contract suite. Expect nonzero with
+`test not referenced in build.sh: Tests/UnreferencedTests.swift`.
+Record the real build output for both newly included Swift tests and any compiler
+warnings. The contract suite uses tool doubles and cannot establish Swift validity.
+
+No commit or push was performed. The previous issue's handover follows unchanged.
+
+---
+
 # Issue #9 — implementation handover
 
 ## Basis and binding scope

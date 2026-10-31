@@ -4,10 +4,16 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 APP="dist/Klemmi.app"
+TEST_DIR=""
+BIN=""
+cleanup() {
+  if [[ -n "$TEST_DIR" ]]; then rm -rf "$TEST_DIR"; fi
+  if [[ -n "$BIN" ]]; then rm -f "$BIN"; fi
+}
+trap cleanup EXIT
 
 echo "==> testing history safety and persistence"
 TEST_DIR="$(mktemp -d)"
-trap 'rm -rf "$TEST_DIR"' EXIT
 swiftc Sources/CapturePolicy.swift Tests/CapturePolicyTests.swift -o "$TEST_DIR/CapturePolicyTests"
 "$TEST_DIR/CapturePolicyTests"
 swiftc Sources/HistorySafety.swift Tests/HistorySafetyTests.swift -o "$TEST_DIR/HistorySafetyTests"
@@ -38,9 +44,18 @@ swiftc -target "$(uname -m)-apple-macosx13.0" \
   -framework AppKit -framework Carbon -o "$TEST_DIR/HotKeyTests"
 "$TEST_DIR/HotKeyTests"
 
+echo "==> testing overlay positioning"
+# Swift requires a file named main.swift for top-level test code in a multi-file build.
+cp Tests/OverlayPositionTests.swift "$TEST_DIR/main.swift"
+swiftc Sources/OverlayPositioning.swift "$TEST_DIR/main.swift" -o "$TEST_DIR/OverlayPositionTests"
+"$TEST_DIR/OverlayPositionTests"
+
+echo "==> testing main menu"
+swiftc Sources/MainMenu.swift Tests/MainMenuTests.swift -framework AppKit -o "$TEST_DIR/MainMenuTests"
+"$TEST_DIR/MainMenuTests"
+
 echo "==> compiling"
 BIN=$(mktemp "${TMPDIR:-/tmp}/klemmi-build.XXXXXX")
-trap 'rm -f "$BIN"' EXIT
 
 swiftc -O -target arm64-apple-macos13 \
   Sources/Support.swift Sources/Localization.swift Sources/HistoryItem.swift Sources/HistorySafety.swift Sources/HistoryPinning.swift Sources/HistoryStore.swift Sources/CapturePolicy.swift \
