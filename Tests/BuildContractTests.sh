@@ -11,6 +11,8 @@ mkdir -p "$TMP/bin" "$TMP/project/Resources/en.lproj" "$TMP/temp output"
 cp "$ROOT/build.sh" "$TMP/project/build.sh"
 export PATH="$TMP/bin:$PATH" TMPDIR="$TMP/temp output"
 export ARGUMENTS="$TMP/arguments" OUTPUT="$TMP/output" CODESIGN_IDENTITY=- VERSION=
+export CODESIGN_ARGUMENTS="$TMP/codesign-arguments" IMPORT_ARGUMENTS="$TMP/import-arguments"
+export EXPORT_ARGUMENTS="$TMP/export-arguments"
 
 cat > "$TMP/bin/swiftc" <<'STUB'
 #!/usr/bin/env bash
@@ -43,7 +45,29 @@ STUB
 cat > "$TMP/bin/codesign" <<'STUB'
 #!/usr/bin/env bash
 set -euo pipefail
+printf '%s\n' "$@" > "$CODESIGN_ARGUMENTS"
 [[ "$(cat dist/Klemmi.app/Contents/MacOS/Klemmi)" == 'compiled executable' ]]
+STUB
+# Keychain double: lists $IDENTITIES for find-identity, records import arguments.
+cat > "$TMP/bin/security" <<'STUB'
+#!/usr/bin/env bash
+set -euo pipefail
+case "$1" in
+  find-identity) printf '%s\n' "${IDENTITIES:-}" ;;
+  import) printf '%s\n' "$@" > "$IMPORT_ARGUMENTS" ;;
+  *) exit 99 ;;
+esac
+STUB
+# OpenSSL double: random output for `rand`, records the PKCS#12 export arguments.
+cat > "$TMP/bin/openssl" <<'STUB'
+#!/usr/bin/env bash
+set -euo pipefail
+case "$1" in
+  rand) printf 'random%s%s%s\n' "$$" "$RANDOM" "$RANDOM" ;;
+  req) ;;
+  pkcs12) printf '%s\n' "$@" > "$EXPORT_ARGUMENTS" ;;
+  *) exit 99 ;;
+esac
 STUB
 chmod +x "$TMP/bin/"*
 
@@ -76,6 +100,43 @@ target=$(awk 'previous == "-target" { print } { previous = $0 }' "$ARGUMENTS")
 [[ "$target" == arm64-apple-macos13 ]] || fail "incorrect compiler target: $target"
 [[ "$(cat "$OUTPUT")" != dist/Klemmi.app/* ]] || fail 'compiler wrote directly into bundle'
 [[ ! -e "$(cat "$OUTPUT")" ]] || fail 'temporary compiler output leaked on success'
+# --deep is deprecated and unnecessary: the bundle has no nested code.
+! grep -Fx -- '--deep' "$CODESIGN_ARGUMENTS" >/dev/null || fail 'codesign called with --deep'
+[[ "$(tail -n 1 "$CODESIGN_ARGUMENTS")" == dist/Klemmi.app ]] || fail 'codesign did not sign the bundle'
+
+# Keychain identity preference: Klemmi names first, Tappi only as legacy fallback.
+signed_identity() { awk 'previous == "--sign" { print } { previous = $0 }' "$CODESIGN_ARGUMENTS"; }
+identity() { printf '  %s) %040d "%s"\n' "$1" "$1" "$2"; }
+expect_identity() {
+  CODESIGN_IDENTITY= bash "$TMP/project/build.sh" > "$TMP/build.log" 2>&1 || fail "build failed: $2"
+  [[ "$(signed_identity)" == "$1" ]] || fail "signed with '$(signed_identity)' instead of '$1': $2"
+}
+IDENTITIES="$(identity 1 'Tappi Local Signing'; identity 2 'leonatwork Code Signing'; identity 3 'Klemmi Local Signing')" \
+  expect_identity 'Klemmi Local Signing' 'all identities present'
+IDENTITIES="$(identity 1 'Tappi Local Signing'; identity 2 'leonatwork Code Signing')" \
+  expect_identity 'leonatwork Code Signing' 'shared identity before legacy'
+IDENTITIES="$(identity 1 'Tappi Local Signing')" expect_identity 'Tappi Local Signing' 'legacy fallback'
+IDENTITIES='' expect_identity - 'no identity falls back to ad-hoc'
+
+# setup-signing.sh: per-run random PKCS#12 password, never printed, no access for all apps.
+cp "$ROOT/setup-signing.sh" "$TMP/project/setup-signing.sh"
+mkdir -p "$TMP/home"
+after() { awk -v flag="$1" 'previous == flag { print } { previous = $0 }' "$2"; }
+passwords=()
+for run in 1 2; do
+  rm -f "$IMPORT_ARGUMENTS" "$EXPORT_ARGUMENTS"
+  HOME="$TMP/home" IDENTITIES='' bash "$TMP/project/setup-signing.sh" > "$TMP/setup.log" 2>&1 \
+    || fail "setup-signing.sh failed: $(cat "$TMP/setup.log")"
+  [[ "$(after -name "$EXPORT_ARGUMENTS")" == 'Klemmi Local Signing' ]] || fail 'default identity is not Klemmi Local Signing'
+  ! grep -Fx -- '-A' "$IMPORT_ARGUMENTS" >/dev/null || fail 'import grants all applications access (-A)'
+  [[ "$(after -T "$IMPORT_ARGUMENTS")" == /usr/bin/codesign ]] || fail 'import does not restrict access to codesign'
+  password="$(after -P "$IMPORT_ARGUMENTS")"
+  [[ -n "$password" && "$password" != tappi ]] || fail "import password is fixed or empty: '$password'"
+  [[ "$(after -passout "$EXPORT_ARGUMENTS")" == "pass:$password" ]] || fail 'export and import passwords differ'
+  ! grep -F -- "$password" "$TMP/setup.log" >/dev/null || fail 'password was printed'
+  passwords+=("$password")
+done
+[[ "${passwords[0]}" != "${passwords[1]}" ]] || fail 'password is not generated per run'
 
 # Exercise the same binary inspector used by both workflows, including tool failures
 # that still print plausible output. No Apple command-line tools are used here.

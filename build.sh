@@ -102,9 +102,11 @@ swift icon.swift "$APP/Contents/Resources/AppIcon.icns"
 
 # Prefer the shared signing identity over ad-hoc. In CI it comes from CODESIGN_IDENTITY;
 # locally it is picked up from the keychain if it has been imported there.
+# "Tappi Local Signing" is the legacy name created by older versions of setup-signing.sh; it is
+# kept last as a fallback so existing setups keep their stable identity.
 IDENTITY="${CODESIGN_IDENTITY:-}"
 if [[ -z "$IDENTITY" ]]; then
-  for candidate in "leonatwork Code Signing" "Tappi Local Signing"; do
+  for candidate in "Klemmi Local Signing" "leonatwork Code Signing" "Tappi Local Signing"; do
     if security find-identity -p codesigning 2>/dev/null | grep -q "$candidate"; then
       IDENTITY="$candidate"
       break
@@ -113,7 +115,7 @@ if [[ -z "$IDENTITY" ]]; then
   IDENTITY="${IDENTITY:--}"
 fi
 echo "==> codesign (identity: $IDENTITY)"
-if ! codesign --force --deep --sign "$IDENTITY" "$APP"; then
+if ! codesign --force --sign "$IDENTITY" "$APP"; then
   echo "!!  signing with '$IDENTITY' failed" >&2
   exit 1
 fi

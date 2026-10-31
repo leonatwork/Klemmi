@@ -14,7 +14,8 @@
 # untrusted self-signed identity for local signing, so no admin password is needed.
 set -euo pipefail
 
-NAME="${1:-Tappi Local Signing}"
+# Default name changed from "Tappi Local Signing"; build.sh still accepts that one as a fallback.
+NAME="${1:-Klemmi Local Signing}"
 KEYCHAIN="$HOME/Library/Keychains/login.keychain-db"
 
 if security find-identity -p codesigning | grep -q "$NAME"; then
@@ -33,14 +34,20 @@ openssl req -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes \
   -addext "keyUsage=critical,digitalSignature" \
   -addext "extendedKeyUsage=critical,codeSigning" 2>/dev/null
 
+# The PKCS#12 file only carries the key into the keychain, so a fresh random password per run
+# is enough. It is never printed.
+PASS="$(openssl rand -hex 24)"
+[[ -n "$PASS" ]] || { echo "!!  could not generate a random password" >&2; exit 1; }
+
 # Apple's keychain cannot read OpenSSL 3's default PKCS#12 algorithms.
 openssl pkcs12 -export -out "$WORK/id.p12" \
   -inkey "$WORK/key.pem" -in "$WORK/cert.pem" \
-  -passout pass:tappi -name "$NAME" \
+  -passout "pass:$PASS" -name "$NAME" \
   -macalg sha1 -certpbe PBE-SHA1-3DES -keypbe PBE-SHA1-3DES 2>/dev/null
 
 echo "==> importing into the login keychain"
-security import "$WORK/id.p12" -k "$KEYCHAIN" -P tappi -T /usr/bin/codesign -A >/dev/null
+# Only codesign may use the private key (no -A, which would allow every application).
+security import "$WORK/id.p12" -k "$KEYCHAIN" -P "$PASS" -T /usr/bin/codesign >/dev/null
 
 echo "==> done. './build.sh --install' will now use it automatically."
 echo "    Grant the permissions once more; they will survive every rebuild after that."
