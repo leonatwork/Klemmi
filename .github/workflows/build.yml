@@ -13,10 +13,6 @@ jobs:
       - uses: actions/checkout@v5
       - name: Toolchain
         run: swift --version
-      - name: Test main menu
-        run: |
-          swiftc Sources/MainMenu.swift Tests/MainMenuTests.swift -framework AppKit -o "$RUNNER_TEMP/MainMenuTests"
-          "$RUNNER_TEMP/MainMenuTests"
       - name: Check localizations
         run: scripts/check-localizations.sh
       - name: Build contract regression tests

@@ -40,6 +40,9 @@ jobs:
           echo "CODESIGN_IDENTITY=leonatwork Code Signing" >> "$GITHUB_ENV"
           echo "signed=true" >> "$GITHUB_OUTPUT"
 
+      - name: Check localizations
+        run: scripts/check-localizations.sh
+
       - name: Build contract regression tests
         run: bash Tests/BuildContractTests.sh
 
